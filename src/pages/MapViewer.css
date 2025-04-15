@@ -1,0 +1,259 @@
+.map-viewer-section {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.map-viewer-section h1 {
+  text-align: center;
+  color: #333;
+  margin-bottom: 2rem;
+}
+
+.search-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.search-box {
+  background-color: #f5f5f5;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.search-box h3 {
+  color: #333;
+  margin-bottom: 1rem;
+}
+
+.location-dropdowns {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.state-dropdown,
+.city-dropdown {
+  padding: 0.8rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+  background-color: white;
+  cursor: pointer;
+  transition: border-color 0.3s;
+}
+
+.state-dropdown:focus,
+.city-dropdown:focus {
+  outline: none;
+  border-color: #2196f3;
+}
+
+.state-dropdown:disabled,
+.city-dropdown:disabled {
+  background-color: #f5f5f5;
+  cursor: not-allowed;
+}
+
+.coordinate-inputs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.coordinate-input {
+  padding: 0.8rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+  width: 100%;
+}
+
+.coordinate-input:focus {
+  outline: none;
+  border-color: #2196f3;
+}
+
+.search-button {
+  background-color: #2196f3;
+  color: white;
+  border: none;
+  padding: 0.8rem 1.5rem;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  width: 100%;
+}
+
+.search-button:hover {
+  background-color: #1976d2;
+}
+
+.search-button:disabled {
+  background-color: #bdbdbd;
+  cursor: not-allowed;
+}
+
+.map-container {
+  width: 100%;
+  height: 500px;
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 2rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: relative;
+}
+
+.map {
+  width: 100%;
+  height: 100%;
+}
+
+.map-dialogue {
+  position: absolute;
+  background-color: rgba(255, 255, 255, 0.95);
+  padding: 0.8rem 1.2rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  max-width: 200px;
+  text-align: center;
+  backdrop-filter: blur(5px);
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  transform: translate(-50%, -100%);
+  margin-top: -10px;
+  pointer-events: none;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+.map-dialogue h3 {
+  margin: 0 0 0.3rem 0;
+  color: #333;
+  font-size: 1rem;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.map-dialogue p {
+  margin: 0;
+  color: #666;
+  font-size: 0.85rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.dark-mode-toggle {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  background-color: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  transition: all 0.3s ease;
+  z-index: 1;
+}
+
+.dark-mode-toggle:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.dark-mode-toggle.active {
+  background-color: #333;
+  color: white;
+}
+
+.error-message {
+  background-color: #ffebee;
+  color: #c62828;
+  padding: 1rem;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.loading-message {
+  background-color: #e3f2fd;
+  color: #1565c0;
+  padding: 1rem;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+  text-align: center;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.map-info {
+  background-color: #f5f5f5;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin-top: 2rem;
+}
+
+.map-info h3 {
+  color: #333;
+  margin-bottom: 1rem;
+}
+
+.map-info p {
+  color: #666;
+  margin-bottom: 1rem;
+}
+
+.map-info ul {
+  list-style-type: disc;
+  padding-left: 1.5rem;
+  color: #666;
+}
+
+.map-info li {
+  margin-bottom: 0.5rem;
+}
+
+@media (max-width: 768px) {
+  .search-container {
+    grid-template-columns: 1fr;
+  }
+  
+  .coordinate-inputs {
+    grid-template-columns: 1fr;
+  }
+
+  .dark-mode-toggle {
+    width: 35px;
+    height: 35px;
+    font-size: 1rem;
+  }
+
+  .map-dialogue {
+    max-width: 90%;
+    padding: 0.8rem 1.2rem;
+  }
+} 
