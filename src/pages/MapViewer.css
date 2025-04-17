@@ -2,11 +2,26 @@
   max-width: 1200px;
   margin: 0 auto;
   padding: 2rem;
+  min-height: 100vh;
+  margin-top: -64px;
+  padding-top: calc(64px + 2rem);
+  position: relative;
+}
+
+.map-viewer-section::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(15, 23, 42, 0.6);
+  z-index: -1;
 }
 
 .map-viewer-section h1 {
   text-align: center;
-  color: #333;
+  color: var(--text-primary);
   margin-bottom: 2rem;
 }
 
@@ -18,14 +33,16 @@
 }
 
 .search-box {
-  background-color: #f5f5f5;
+  background: rgba(15, 23, 42, 0.3);
   padding: 1.5rem;
   border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border: 1px solid var(--border-color);
+  backdrop-filter: blur(12px);
 }
 
 .search-box h3 {
-  color: #333;
+  color: var(--text-primary);
   margin-bottom: 1rem;
 }
 
@@ -38,24 +55,27 @@
 .state-dropdown,
 .city-dropdown {
   padding: 0.8rem;
-  border: 1px solid #ddd;
+  border: 1px solid var(--border-color);
   border-radius: 4px;
   font-size: 1rem;
-  background-color: white;
+  background: rgba(15, 23, 42, 0.5);
+  color: var(--text-primary);
   cursor: pointer;
-  transition: border-color 0.3s;
+  transition: all 0.3s ease;
 }
 
 .state-dropdown:focus,
 .city-dropdown:focus {
   outline: none;
-  border-color: #2196f3;
+  border-color: var(--accent-primary);
+  background: rgba(15, 23, 42, 0.7);
 }
 
 .state-dropdown:disabled,
 .city-dropdown:disabled {
-  background-color: #f5f5f5;
+  background: rgba(15, 23, 42, 0.2);
   cursor: not-allowed;
+  color: var(--text-secondary);
 }
 
 .coordinate-inputs {
@@ -67,36 +87,42 @@
 
 .coordinate-input {
   padding: 0.8rem;
-  border: 1px solid #ddd;
+  border: 1px solid var(--border-color);
   border-radius: 4px;
   font-size: 1rem;
   width: 100%;
+  background: rgba(15, 23, 42, 0.5);
+  color: var(--text-primary);
+  transition: all 0.3s ease;
 }
 
 .coordinate-input:focus {
   outline: none;
-  border-color: #2196f3;
+  border-color: var(--accent-primary);
+  background: rgba(15, 23, 42, 0.7);
 }
 
 .search-button {
-  background-color: #2196f3;
+  background: var(--accent-primary);
   color: white;
   border: none;
   padding: 0.8rem 1.5rem;
   border-radius: 4px;
   font-size: 1rem;
   cursor: pointer;
-  transition: background-color 0.3s;
+  transition: all 0.3s ease;
   width: 100%;
 }
 
 .search-button:hover {
-  background-color: #1976d2;
+  background: var(--accent-secondary);
+  transform: translateY(-1px);
 }
 
 .search-button:disabled {
-  background-color: #bdbdbd;
+  background: rgba(15, 23, 42, 0.5);
   cursor: not-allowed;
+  color: var(--text-secondary);
 }
 
 .map-container {
