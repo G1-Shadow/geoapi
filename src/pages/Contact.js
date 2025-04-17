@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import SubmitPopup from '../components/SubmitPopup';
 import './Contact.css';
 
 const Contact = () => {
@@ -6,21 +7,57 @@ const Contact = () => {
     name: '',
     email: '',
     phone: '',
-    company: '',
     message: ''
   });
 
+  const [showPopup, setShowPopup] = useState(false);
+  const [popupData, setPopupData] = useState({ isSuccess: false, message: '' });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
+    const { name, value } = e.target;
+    setFormData(prevState => ({
+      ...prevState,
+      [name]: value
+    }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle form submission here
-    console.log('Form submitted:', formData);
+
+    try {
+      const response = await fetch('http://localhost:8080/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        credentials: 'include', // Important for CORS with credentials
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone,
+          message: formData.message
+        })
+      });
+
+      if (response.ok) {
+        const data = await response.text();
+        alert(data); // Show success message
+        // Reset form
+        setFormData({
+          name: '',
+          email: '',
+          phone: '',
+          message: ''
+        });
+      } else {
+        const errorText = await response.text();
+        alert(errorText);
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      alert('Failed to send message. Please try again later.');
+    }
   };
 
   return (
@@ -32,11 +69,11 @@ const Contact = () => {
         </p>
 
         <div className="contact-methods">
-          <a href="mailto:hello@example.com" className="contact-method">
+          <a href="mailto:support@Netintel.com" className="contact-method">
             <div className="method-icon">✉️</div>
             <div className="method-details">
               <h3>Send us an email</h3>
-              <p>hello@example.com</p>
+              <p>support@Netintel.com</p>
             </div>
           </a>
 
@@ -51,60 +88,44 @@ const Contact = () => {
 
         <div className="contact-form-container">
           <form onSubmit={handleSubmit} className="contact-form">
-            <div className="form-row">
-              <div className="form-group">
-                <label htmlFor="name">Name</label>
-                <input
-                  type="text"
-                  id="name"
-                  name="name"
-                  placeholder="Your Name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
-
-              <div className="form-group">
-                <label htmlFor="email">Email</label>
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  placeholder="example@email.com"
-                  value={formData.email}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
+            <div className="form-group">
+              <label htmlFor="name">Name</label>
+              <input
+                type="text"
+                id="name"
+                name="name"
+                placeholder="Your Name"
+                value={formData.name}
+                onChange={handleChange}
+                required
+              />
             </div>
-
-            <div className="form-row">
-              <div className="form-group">
-                <label htmlFor="phone">Phone</label>
-                <input
-                  type="tel"
-                  id="phone"
-                  name="phone"
-                  placeholder="(123) 456 - 789"
-                  value={formData.phone}
-                  onChange={handleChange}
-                />
-              </div>
-
-              <div className="form-group">
-                <label htmlFor="company">Company</label>
-                <input
-                  type="text"
-                  id="company"
-                  name="company"
-                  placeholder="Your Company"
-                  value={formData.company}
-                  onChange={handleChange}
-                />
-              </div>
+            
+            <div className="form-group">
+              <label htmlFor="email">Email</label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                placeholder="example@gmail.com"
+                value={formData.email}
+                onChange={handleChange}
+                required
+              />
             </div>
-
+            
+            <div className="form-group">
+              <label htmlFor="phone">Phone</label>
+              <input
+                type="tel"
+                id="phone"
+                name="phone"
+                placeholder="XXXXX-XXXXX"
+                value={formData.phone}
+                onChange={handleChange}
+              />
+            </div>
+            
             <div className="form-group">
               <label htmlFor="message">Message</label>
               <textarea
@@ -117,11 +138,25 @@ const Contact = () => {
                 rows="4"
               />
             </div>
-
-            <button type="submit" className="submit-button">Send Message</button>
+            
+            <button 
+              type="submit" 
+              className="submit-button"
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? 'Sending...' : 'Send Message'}
+            </button>
           </form>
         </div>
       </div>
+
+      {showPopup && (
+        <SubmitPopup
+          isSuccess={popupData.isSuccess}
+          message={popupData.message}
+          onClose={() => setShowPopup(false)}
+        />
+      )}
     </div>
   );
 };

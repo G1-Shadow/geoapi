@@ -26,40 +26,118 @@ const MapViewer = () => {
   const [simScore, setSimScore] = useState(0);
   const dataSourceRef = useRef(null);
 
+  // Get user's current location when component mounts
   useEffect(() => {
-    // Check if coordinates were passed from LocationTracker
-    if (location.state?.coordinates) {
-      const { latitude, longitude } = location.state.coordinates;
-      setCoordinates({ lat: latitude.toString(), lng: longitude.toString() });
-      setCurrentLocation({ lat: latitude, lng: longitude });
-    }
-  }, [location.state]);
+    let watchId = null;
+
+    const getLocation = () => {
+      if ("geolocation" in navigator) {
+        // First try to get current position
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            const { latitude, longitude } = position.coords;
+            console.log('Got current location:', latitude, longitude);
+            setCurrentLocation({ lat: latitude, lng: longitude });
+            setCoordinates({ lat: latitude.toString(), lng: longitude.toString() });
+            setError(null);
+            
+            // Update map if it's already initialized
+            if (map) {
+              updateMapWithCoordinates(latitude, longitude);
+            }
+          },
+          (error) => {
+            console.error('Error getting location:', error);
+            setError('Could not get your current location. Please allow location access.');
+            setCurrentLocation({ lat: 20.5937, lng: 78.9629 }); // Default to India center
+          },
+          {
+            enableHighAccuracy: true,
+            timeout: 10000,
+            maximumAge: 0
+          }
+        );
+
+        // Then start watching position for updates
+        watchId = navigator.geolocation.watchPosition(
+          (position) => {
+            const { latitude, longitude } = position.coords;
+            console.log('Location updated:', latitude, longitude);
+            setCurrentLocation({ lat: latitude, lng: longitude });
+            setCoordinates({ lat: latitude.toString(), lng: longitude.toString() });
+            setError(null);
+            
+            // Update map with new location
+            if (map) {
+              updateMapWithCoordinates(latitude, longitude);
+            }
+          },
+          (error) => {
+            console.error('Error watching location:', error);
+            setError('Location tracking error. Please check your location settings.');
+          },
+          {
+            enableHighAccuracy: true,
+            timeout: 10000,
+            maximumAge: 0
+          }
+        );
+      } else {
+        setError('Geolocation is not supported by your browser');
+        setCurrentLocation({ lat: 20.5937, lng: 78.9629 }); // Default to India center
+      }
+    };
+
+    getLocation();
+
+    // Cleanup watchPosition on unmount
+    return () => {
+      if (watchId !== null) {
+        navigator.geolocation.clearWatch(watchId);
+      }
+    };
+  }, []);
 
   useEffect(() => {
     // Check if Azure Maps key is available
-    const azureMapsKey = "Bha7l3M54mc6soBmWPT8y4o4xFKhIeBkLMgUOiwJXfN44lm0ueZYJQQJ99BDACYeBjFb3DozAAAgAZMP4biT"; // You'll need to replace this with a valid key
+    const azureMapsKey = "2lJ1f0wcGsYOCf2LHUWkSuQrkAGLOic4SfMbDv1kGKeR12rWWFTfJQQJ99BDACYeBjFb3DozAAAgAZMP3srJ"; // Azure Maps primary key
     if (!azureMapsKey) {
-      setError('Azure Maps key is not configured.');
+      console.error('Azure Maps key is missing or invalid');
+      setError('Azure Maps key is not configured properly.');
       setIsLoading(false);
       return;
     }
 
     // Check if Azure Maps is already loaded
     if (window.atlas) {
+      console.log('Azure Maps SDK already loaded, initializing map...');
       initializeMap(azureMapsKey);
       return;
     }
 
+    console.log('Loading Azure Maps SDK...');
     // Load Azure Maps script
     const script = document.createElement('script');
     script.src = 'https://atlas.microsoft.com/sdk/javascript/mapcontrol/2/atlas.min.js';
     script.async = true;
+    script.onerror = () => {
+      console.error('Failed to load Azure Maps SDK');
+      setError('Failed to load map resources. Please check your internet connection.');
+      setIsLoading(false);
+    };
     script.onload = () => {
+      console.log('Azure Maps SDK loaded successfully');
       // Load Azure Maps CSS
       const link = document.createElement('link');
       link.rel = 'stylesheet';
       link.href = 'https://atlas.microsoft.com/sdk/javascript/mapcontrol/2/atlas.min.css';
+      link.onerror = () => {
+        console.error('Failed to load Azure Maps CSS');
+        setError('Failed to load map styles. Please check your internet connection.');
+        setIsLoading(false);
+      };
       link.onload = () => {
+        console.log('Azure Maps CSS loaded successfully');
         initializeMap(azureMapsKey);
       };
       document.head.appendChild(link);
@@ -69,11 +147,13 @@ const MapViewer = () => {
     return () => {
       // Cleanup
       if (map) {
+        console.log('Disposing map instance');
         map.dispose();
       }
     };
   }, []);
 
+  // When map is initialized and we have current location, update the map
   useEffect(() => {
     if (map && currentLocation) {
       updateMapWithCoordinates(currentLocation.lat, currentLocation.lng);
@@ -106,24 +186,40 @@ const MapViewer = () => {
 
   const initializeMap = (key) => {
     try {
-      if (!mapRef.current) return;
+      if (!mapRef.current) {
+        console.error('Map container reference is not available');
+        return;
+      }
 
-      console.log('Initializing map with key:', key);
+      console.log('Initializing map with container:', mapRef.current);
+
+      // Use currentLocation if available, otherwise use India center
+      const center = currentLocation 
+        ? [currentLocation.lng, currentLocation.lat] 
+        : [78.9629, 20.5937];
 
       const mapInstance = new window.atlas.Map(mapRef.current, {
         authOptions: {
           authType: 'subscriptionKey',
           subscriptionKey: key
         },
-        center: [78.9629, 20.5937], // Center of India
-        zoom: 5,
-        style: 'road'
+        center: center,
+        zoom: currentLocation ? 12 : 5,
+        style: isDarkMode ? 'night' : 'road',
+        language: 'en-US',
+        renderWorldCopies: false
       });
 
       mapInstance.events.add('ready', () => {
-        console.log('Map initialized successfully');
+        console.log('Map ready event fired');
         setMap(mapInstance);
         setIsLoading(false);
+
+        // If we have current location, update the map and add marker
+        if (currentLocation) {
+          console.log('Updating map with current location:', currentLocation);
+          updateMapWithCoordinates(currentLocation.lat, currentLocation.lng);
+        }
       });
 
       mapInstance.events.add('error', (error) => {
@@ -142,16 +238,55 @@ const MapViewer = () => {
   // Function to fetch sim data from backend
   const fetchSimData = async (lat, lng) => {
     try {
-      // Replace this URL with your actual backend endpoint
-      const response = await fetch(`/api/sim-data?lat=${lat}&lng=${lng}`);
+      // Show default dialogue box immediately
+      setDialogueInfo({
+        title: 'Location Information',
+        content: `Latitude: ${lat.toFixed(6)}
+                  Longitude: ${lng.toFixed(6)}
+                  Fetching network data...`
+      });
+      setShowDialogue(true);
+
+      const response = await fetch('https://ml-shree007.azurewebsites.net/api/get_best_provider', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          longitude: lng,
+          latitude: lat
+        })
+      });
+
       if (!response.ok) {
-        throw new Error('Failed to fetch sim data');
+        throw new Error('Failed to fetch network data');
       }
+
       const data = await response.json();
-      setBestSimProvider(data.provider || 'Not Available');
-      setSimScore(data.score || 'N/A');
+      
+      // Update the dialogue info with the response data
+      setDialogueInfo({
+        title: 'Location Information',
+        content: `Latitude: ${lat.toFixed(6)}
+                  Longitude: ${lng.toFixed(6)}
+                  Best Network: ${data.best_provider || 'N/A'}
+                  Network Score: ${data.score ? data.score.toFixed(2) : 'N/A'}`
+      });
+
+      // Update other state variables
+      setBestSimProvider(data.best_provider || 'Not Available');
+      setSimScore(data.score ? data.score.toFixed(2) : 'N/A');
+
     } catch (error) {
-      console.error('Error fetching sim data:', error);
+      console.error('Error fetching network data:', error);
+      // Show basic location info when backend is not available
+      setDialogueInfo({
+        title: 'Location Information',
+        content: `Latitude: ${lat.toFixed(6)}
+                  Longitude: ${lng.toFixed(6)}
+                  Network Data: Unavailable
+                  Status: Unable to fetch network information`
+      });
       setBestSimProvider('Not Available');
       setSimScore('N/A');
     }
@@ -160,114 +295,136 @@ const MapViewer = () => {
   const updateMapWithCoordinates = (lat, lng) => {
     if (!map) {
       console.error('Map not initialized');
+      setError('Map is not ready yet. Please wait...');
       return;
     }
 
     try {
-      console.log('Updating map with coordinates:', lat, lng);
-      
-      // Convert coordinates to numbers
+      // Validate coordinates
       const latitude = parseFloat(lat);
       const longitude = parseFloat(lng);
 
       if (isNaN(latitude) || isNaN(longitude)) {
-        console.error('Invalid coordinates');
-        return;
+        throw new Error('Invalid coordinates provided');
       }
 
-      // Fetch sim data for the location
-      fetchSimData(latitude, longitude);
+      if (latitude < -90 || latitude > 90 || longitude < -180 || longitude > 180) {
+        throw new Error('Coordinates out of valid range');
+      }
 
-      // Clean up existing marker and popup
+      // Remove existing marker if any
       if (currentMarker) {
         map.markers.remove(currentMarker);
         setCurrentMarker(null);
       }
-      if (currentPopup) {
-        currentPopup.close();
-        setCurrentPopup(null);
+
+      // Create data source if it doesn't exist
+      if (!dataSourceRef.current) {
+        dataSourceRef.current = new window.atlas.source.DataSource();
+        map.sources.add(dataSourceRef.current);
       }
 
-      // Update map view first
+      // Create point feature
+      const point = new window.atlas.data.Feature(
+        new window.atlas.data.Point([longitude, latitude])
+      );
+
+      // Clear existing data and add new point
+      dataSourceRef.current.clear();
+      dataSourceRef.current.add(point);
+
+      // Create marker
+      const marker = new window.atlas.HtmlMarker({
+        position: [longitude, latitude],
+        color: '#4299e1',
+        text: '📍',
+        pixelOffset: [0, 0]
+      });
+
+      // Add marker to map
+      map.markers.add(marker);
+      setCurrentMarker(marker);
+
+      // Center map on marker with animation
       map.setCamera({
         center: [longitude, latitude],
-        zoom: 12,
+        zoom: 15,
         type: 'ease',
         duration: 1000
       });
 
-      // Wait for camera animation to complete
-      setTimeout(() => {
-        try {
-          // Create new marker
-          const marker = new window.atlas.HtmlMarker({
-            position: [longitude, latitude],
-            color: 'red',
-            text: '📍'
-          });
+      // Create popup
+      const popup = new window.atlas.Popup({
+        position: [longitude, latitude],
+        content: `
+          <div class="map-dialogue">
+            <h3>${dialogueInfo.title}</h3>
+            <p>${dialogueInfo.content}</p>
+          </div>
+        `,
+        pixelOffset: [0, -30],
+        closeButton: false
+      });
 
-          // Add marker to map
-          map.markers.add(marker);
-          setCurrentMarker(marker);
+      // Remove existing popup if any
+      if (currentPopup) {
+        currentPopup.close();
+      }
 
-          // Create and show popup
-          const popup = new window.atlas.Popup({
-            content: `
-              <div style="padding: 10px; background: white; border-radius: 4px;">
-                <h3 style="margin: 0 0 5px 0; font-size: 14px; color: black;">Your Location</h3>
-                <p style="margin: 0; font-size: 12px; color: black;">
-                  Best Network: ${bestSimProvider}<br>
-                  Signal Score: ${simScore}
-                </p>
-              </div>
-            `,
-            position: [longitude, latitude],
-            pixelOffset: [0, -30],
-            closeButton: false
-          });
+      // Add popup to map
+      popup.open(map);
+      setCurrentPopup(popup);
+      setShowDialogue(true);
 
-          popup.open(map);
-          setCurrentPopup(popup);
-
-          console.log('Marker and popup added successfully');
-        } catch (error) {
-          console.error('Error adding marker or popup:', error);
-          setError('Failed to add location marker');
-        }
-      }, 1000); // Wait for camera animation
+      // Fetch and display network data
+      fetchSimData(latitude, longitude);
 
     } catch (error) {
       console.error('Error updating map:', error);
-      setError('Failed to update map position');
+      setError(error.message || 'Failed to update map with coordinates');
+      setShowDialogue(false);
     }
   };
+
+  // Update popup content when dialogueInfo changes
+  useEffect(() => {
+    if (currentPopup && showDialogue) {
+      currentPopup.setOptions({
+        content: `
+          <div class="map-dialogue">
+            <h3>${dialogueInfo.title}</h3>
+            <p>${dialogueInfo.content}</p>
+          </div>
+        `
+      });
+    }
+  }, [dialogueInfo, currentPopup, showDialogue]);
 
   // Add event listener for map movement
   useEffect(() => {
     if (map && currentMarker) {
-      const updateDialoguePosition = () => {
+      const updatePopupPosition = () => {
         try {
-          const position = currentMarker.getOptions().position;
-          const pixelPosition = map.positionsToPixels(position);
-          console.log('Updating dialogue position:', pixelPosition);
-          setMarkerPosition({
-            x: pixelPosition[0],
-            y: pixelPosition[1]
-          });
+          if (currentPopup) {
+            const position = currentMarker.getOptions().position;
+            currentPopup.setOptions({
+              position: position
+            });
+          }
         } catch (error) {
-          console.error('Error updating dialogue position:', error);
+          console.error('Error updating popup position:', error);
         }
       };
 
-      map.events.add('moveend', updateDialoguePosition);
-      map.events.add('zoomend', updateDialoguePosition);
+      map.events.add('moveend', updatePopupPosition);
+      map.events.add('zoomend', updatePopupPosition);
 
       return () => {
-        map.events.remove('moveend', updateDialoguePosition);
-        map.events.remove('zoomend', updateDialoguePosition);
+        map.events.remove('moveend', updatePopupPosition);
+        map.events.remove('zoomend', updatePopupPosition);
       };
     }
-  }, [map, currentMarker]);
+  }, [map, currentMarker, currentPopup]);
 
   // Debug state changes
   useEffect(() => {
@@ -328,7 +485,7 @@ const MapViewer = () => {
     }
 
     try {
-      setError(null); // Clear any existing errors
+      setError(null);
       updateMapWithCoordinates(lat, lng);
     } catch (error) {
       console.error('Coordinate search error:', error);
