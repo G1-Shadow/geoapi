@@ -100,7 +100,7 @@ const MapViewer = () => {
 
   useEffect(() => {
     // Check if Azure Maps key is available
-    const azureMapsKey = "2lJ1f0wcGsYOCf2LHUWkSuQrkAGLOic4SfMbDv1kGKeR12rWWFTfJQQJ99BDACYeBjFb3DozAAAgAZMP3srJ"; // Azure Maps primary key
+    const azureMapsKey = process.env.REACT_APP_AZURE_MAPS_KEY;
     if (!azureMapsKey) {
       console.error('Azure Maps key is missing or invalid');
       setError('Azure Maps key is not configured properly.');
