@@ -8,27 +8,27 @@ const Home = () => {
       {/* Hero Section */}
       <section className="hero">
         <div className="hero-content">
-          <h1>Location Intelligence for Modern Applications</h1>
+          <h1>Net<span>Intel</span></h1>
           <p>
-            Powerful APIs and tools for location tracking, speed testing, and
-            interactive mapping solutions.
+           Short for Network Intelligence.
+           Flexible for scoring, insights and analytics.
           </p>
-          <div className="hero-buttons">
+          {/* <div className="hero-buttons">
             <Link to="/plans" className="button primary">
               Get Started
             </Link>
             <Link to="/contact" className="button secondary">
               Contact Sales
             </Link>
-          </div>
+          </div> */}
         </div>
       </section>
 
       {/* Features Section */}
       <section className="features">
-        <h2>Why Choose NetIntel</h2>
+        {/* <h2>Why Choose NetIntel</h2> */}
         <div className="features-grid">
-          <div className="feature-card">
+          {/* <div className="feature-card">
             <div className="feature-icon">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
@@ -37,7 +37,7 @@ const Home = () => {
             </div>
             <h3>Real-time Location Tracking</h3>
             <p>Track locations with high accuracy and minimal battery impact.</p>
-          </div>
+          </div> */}
 
           <div className="feature-card">
             <div className="feature-icon">
@@ -72,7 +72,7 @@ const Home = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="cta">
+      {/* <section className="cta">
         <div className="cta-content">
           <h2>Ready to Get Started?</h2>
           <p>Join thousands of developers building the future of location services.</p>
@@ -80,7 +80,7 @@ const Home = () => {
             View Plans
           </Link>
         </div>
-      </section>
+      </section> */}
     </div>
   );
 };

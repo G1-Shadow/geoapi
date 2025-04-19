@@ -1,7 +1,11 @@
 .contact-container {
   min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #0f172a, #000000);
   padding: 2rem;
-  background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+  position: relative;
   color: #ffffff;
   border-radius: 20px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
@@ -163,9 +167,34 @@
   text-align: center;
 }
 
+.contact-comments-section {
+  margin-top: 3rem;
+  width: 100%;
+}
+
+/* Adjust the comments container within contact page */
+.contact-comments-section .comments-container {
+  margin: 0;
+  background: transparent;
+  box-shadow: none;
+  padding: 0;
+}
+
+.contact-comments-section .comment-form textarea {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.contact-comments-section .comment-card {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Responsive Design */
 @media (max-width: 768px) {
-  .contact-content h1 {
-    font-size: 2.5rem;
+  .contact-container {
+    margin: 1rem;
+    padding: 1rem;
   }
 
   .contact-methods {
@@ -178,5 +207,9 @@
 
   .contact-form-container {
     padding: 1.5rem;
+  }
+
+  .contact-comments-section {
+    margin-top: 2rem;
   }
 } 

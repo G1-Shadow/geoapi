@@ -8,9 +8,34 @@ import MapViewer from './pages/MapViewer';
 import Plans from './pages/Pricing';
 import Chatbot from './components/Chatbot';
 import Profile from './pages/Profile';
+import NextPageButton from './components/NextPageButton';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import './App.css';
 import './index.css';
+import arrowIcon from './imgs/arrow.svg';
+import notificationIcon from './imgs/notifications.svg';
+
+// Define page order
+const pageOrder = {
+  '/': '/location',
+  '/location': '/speed-test',
+  '/speed-test': '/map',
+  '/map': '/plans',
+  '/plans': '/contact',
+  '/contact': '/',
+};
+
+const PageWrapper = ({ children }) => {
+  const location = useLocation();
+  const nextPage = pageOrder[location.pathname];
+
+  return (
+    <>
+      {children}
+      {nextPage && <NextPageButton nextPage={nextPage} />}
+    </>
+  );
+};
 
 const LoginPopup = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -101,45 +126,63 @@ const Navbar = () => {
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="brand-icon" width="24" height="24">
               <path fillRule="evenodd" d="M14.615 1.595a.75.75 0 0 1 .359.852L12.982 9.75h7.268a.75.75 0 0 1 .548 1.262l-10.5 11.25a.75.75 0 0 1-1.272-.71l1.992-7.302H3.75a.75.75 0 0 1-.548-1.262l10.5-11.25a.75.75 0 0 1 .913-.143Z" clipRule="evenodd" />
             </svg>
-            NetIntel
+            Net<span>Intel</span>
           </Link>
         </div>
         
         <div className="navbar-links">
           <Link to="/" className={`nav-link ${location.pathname === '/' ? 'active' : ''}`}>
-            Home
+            Home 
           </Link>
+          <img src={arrowIcon} alt="arrow" />
           <Link to="/location" className={`nav-link ${location.pathname === '/location' ? 'active' : ''}`}>
-            Location Tracker
+            Location Tracker 
           </Link>
+          <img src={arrowIcon} alt="arrow" />
           <Link to="/speed-test" className={`nav-link ${location.pathname === '/speed-test' ? 'active' : ''}`}>
-            Speed Test
+            Speed Test 
           </Link>
+          <img src={arrowIcon} alt="arrow" />
           <Link to="/map" className={`nav-link ${location.pathname === '/map' ? 'active' : ''}`}>
-            Map Viewer
+            Map Viewer 
           </Link>
+          <img src={arrowIcon} alt="arrow" />
           <Link to="/plans" className={`nav-link ${location.pathname === '/plans' ? 'active' : ''}`}>
-            Plans
+            Plans 
           </Link>
+          <img src={arrowIcon} alt="arrow" />
           <Link to="/contact" className={`nav-link ${location.pathname === '/contact' ? 'active' : ''}`}>
-            Contact
+            Contact 
           </Link>
         </div>
 
         <div className="navbar-auth">
           {user ? (
-            <Link to="/profile" className="user-profile-link">
-              <div className="user-avatar">
-                {profilePicture ? (
-                  <img src={profilePicture} alt={user.name} />
-                ) : (
-                  <div className="avatar-placeholder">
-                    {user.name.charAt(0).toUpperCase()}
+            <>
+              <div className="notification-icon">
+                <img src={notificationIcon} alt="notifications" />
+                <div className="notification-dropdown">
+                  <div className="notification-header">
+                    <h3>Notifications</h3>
                   </div>
-                )}
+                  <div className="notification-content">
+                    <p>No new notifications</p>
+                  </div>
+                </div>
               </div>
-              <span className="user-name">{user.name}</span>
-            </Link>
+              <Link to="/profile" className="user-profile-link">
+                <div className="user-avatar">
+                  {profilePicture ? (
+                    <img src={profilePicture} alt={user.name} />
+                  ) : (
+                    <div className="avatar-placeholder">
+                      {user.name.charAt(0).toUpperCase()}
+                    </div>
+                  )}
+                </div>
+                <span className="user-name">{user.name}</span>
+              </Link>
+            </>
           ) : (
             <LoginPopup />
           )}
@@ -157,12 +200,12 @@ const App = () => {
           <Navbar />
           <main>
             <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/location" element={<LocationTracker />} />
-              <Route path="/speed-test" element={<SpeedTest />} />
-              <Route path="/map" element={<MapViewer />} />
-              <Route path="/contact" element={<Contact />} />
-              <Route path="/plans" element={<Plans />} />
+              <Route path="/" element={<PageWrapper><Home /></PageWrapper>} />
+              <Route path="/location" element={<PageWrapper><LocationTracker /></PageWrapper>} />
+              <Route path="/speed-test" element={<PageWrapper><SpeedTest /></PageWrapper>} />
+              <Route path="/map" element={<PageWrapper><MapViewer /></PageWrapper>} />
+              <Route path="/contact" element={<PageWrapper><Contact /></PageWrapper>} />
+              <Route path="/plans" element={<PageWrapper><Plans /></PageWrapper>} />
               <Route path="/profile" element={<Profile />} />
               <Route path="/oauth/callback" element={<OAuthCallback />} />
               <Route 

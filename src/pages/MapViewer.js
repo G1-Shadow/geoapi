@@ -247,48 +247,48 @@ const MapViewer = () => {
       });
       setShowDialogue(true);
 
-      const response = await fetch('https://ml-shree007.azurewebsites.net/api/get_best_provider', {
+      const response = await fetch('http://localhost:8080/api/sim/get', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          longitude: lng,
-          latitude: lat
+          latitude: lat,
+          longitude: lng
         })
       });
 
       if (!response.ok) {
-        throw new Error('Failed to fetch network data');
+        throw new Error('Network response was not ok');
       }
 
       const data = await response.json();
+      console.log('Received SIM data:', data); // Debug log
       
-      // Update the dialogue info with the response data
+      // Update dialogue box with the received data
       setDialogueInfo({
-        title: 'Location Information',
-        content: `Latitude: ${lat.toFixed(6)}
-                  Longitude: ${lng.toFixed(6)}
-                  Best Network: ${data.best_provider || 'N/A'}
-                  Network Score: ${data.score ? data.score.toFixed(2) : 'N/A'}`
+        title: 'Network Information',
+        content: `Location: [${data.location[0]}, ${data.location[1]}]
+                  Provider: ${data.provider}
+                  Network Score: ${data.score}/10
+                  
+                  Latitude: ${lat.toFixed(6)}
+                  Longitude: ${lng.toFixed(6)}`
       });
 
-      // Update other state variables
-      setBestSimProvider(data.best_provider || 'Not Available');
-      setSimScore(data.score ? data.score.toFixed(2) : 'N/A');
+      // Update state variables for sim provider and score
+      setBestSimProvider(data.provider);
+      setSimScore(data.score);
 
     } catch (error) {
-      console.error('Error fetching network data:', error);
-      // Show basic location info when backend is not available
+      console.error('Error fetching sim data:', error);
       setDialogueInfo({
-        title: 'Location Information',
-        content: `Latitude: ${lat.toFixed(6)}
-                  Longitude: ${lng.toFixed(6)}
-                  Network Data: Unavailable
-                  Status: Unable to fetch network information`
+        title: 'Error',
+        content: `Could not fetch network information.
+                  
+                  Latitude: ${lat.toFixed(6)}
+                  Longitude: ${lng.toFixed(6)}`
       });
-      setBestSimProvider('Not Available');
-      setSimScore('N/A');
     }
   };
 

@@ -305,4 +305,15 @@
 
 .tool-button:hover {
   background-color: #0056b3;
+}
+
+.hero h1 {
+  font-size: 3.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: #e2e8f0;
+}
+
+.hero h1 span {
+  color: #3b82f6;
 } 
