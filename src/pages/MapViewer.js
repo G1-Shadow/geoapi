@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
 import { indianStates, indianCities } from '../data/indianLocations';
 import './MapViewer.css';
-import LoadingSpinner from '../components/LoadingSpinner';
 
 const MapViewer = () => {
   const mapRef = useRef(null);
@@ -63,7 +62,6 @@ const MapViewer = () => {
         watchId = navigator.geolocation.watchPosition(
           (position) => {
             const { latitude, longitude } = position.coords;
-            console.log('Location updated:', latitude, longitude);
             setCurrentLocation({ lat: latitude, lng: longitude });
             setCoordinates({ lat: latitude.toString(), lng: longitude.toString() });
             setError(null);
@@ -189,14 +187,6 @@ const MapViewer = () => {
     try {
       if (!mapRef.current) {
         console.error('Map container reference is not available');
-        setIsLoading(false);
-        return;
-      }
-
-      if (!key || typeof key !== 'string' || key.trim() === '') {
-        console.error('Invalid Azure Maps key');
-        setError('Invalid Azure Maps key. Please check your configuration.');
-        setIsLoading(false);
         return;
       }
 
@@ -506,19 +496,17 @@ const MapViewer = () => {
     setIsDarkMode(!isDarkMode);
   };
 
-  if (isLoading) {
-    return (
-      <div className="map-container">
-        <LoadingSpinner size="large" text="Loading map data..." />
-      </div>
-    );
-  }
-
   return (
     <main>
       <section className="map-viewer-section">
         <h1>Azure Maps Viewer</h1>
         
+        {isLoading && (
+          <div className="loading-message">
+            Loading map...
+          </div>
+        )}
+
         {error && (
           <div className="error-message">
             {error}
