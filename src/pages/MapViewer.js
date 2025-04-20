@@ -189,6 +189,7 @@ const MapViewer = () => {
     try {
       if (!mapRef.current) {
         console.error('Map container reference is not available');
+        setIsLoading(false);
         return;
       }
 
