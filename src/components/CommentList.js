@@ -27,7 +27,7 @@ const CommentList = ({
                   <span className="comment-author">{comment.userName}</span>
                   <span className="comment-time">{formatDate(comment.createdAt)}</span>
                 </div>
-                {user && user.id === comment.user.id && (
+                {(user && (user.id === comment.user.id || user.accountType === 'ADMIN')) && (
                   <button 
                     onClick={() => onDelete(comment.id)}
                     className="delete-comment"

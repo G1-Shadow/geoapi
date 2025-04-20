@@ -193,6 +193,13 @@ const MapViewer = () => {
         return;
       }
 
+      if (!key || typeof key !== 'string' || key.trim() === '') {
+        console.error('Invalid Azure Maps key');
+        setError('Invalid Azure Maps key. Please check your configuration.');
+        setIsLoading(false);
+        return;
+      }
+
       console.log('Initializing map with container:', mapRef.current);
 
       // Use currentLocation if available, otherwise use India center
