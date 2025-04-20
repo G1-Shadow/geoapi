@@ -1,14 +1,24 @@
+.location-tracker-container {
+  min-height: 100vh;
+  padding: 2rem;
+  background: linear-gradient(135deg, #0f172a, #000000);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .location-tracker-section {
   max-width: 800px;
   margin: 0 auto;
   padding: 2rem;
-  background-color: #fff;
+  background-color: rgba(30, 41, 59, 0.8);
   border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(10px);
 }
 
 .location-tracker-section h1 {
-  color: #333;
+  color: #fff;
   text-align: center;
   margin-bottom: 2rem;
 }
@@ -24,24 +34,24 @@
 .location-info {
   margin-top: 2rem;
   padding: 1.5rem;
-  background-color: #f5f5f5;
+  background-color: rgba(15, 23, 42, 0.6);
   border-radius: 4px;
 }
 
 .location-info h3 {
-  color: #333;
+  color: #fff;
   margin-bottom: 1rem;
 }
 
 .location-info p {
-  color: #666;
+  color: #94a3b8;
   margin-bottom: 1rem;
 }
 
 .location-info ul {
   list-style-type: disc;
   padding-left: 1.5rem;
-  color: #666;
+  color: #94a3b8;
 }
 
 .retry-button {
@@ -60,8 +70,8 @@
 }
 
 .error-message {
-  background-color: #ffebee;
-  color: #c62828;
+  background-color: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
   padding: 1rem;
   border-radius: 4px;
   margin-bottom: 1rem;
@@ -71,8 +81,8 @@
 }
 
 .permission-denied {
-  background-color: #fff3e0;
-  color: #e65100;
+  background-color: rgba(251, 146, 60, 0.1);
+  color: #fb923c;
   padding: 1rem;
   border-radius: 4px;
   margin-bottom: 1rem;
@@ -109,27 +119,28 @@
 }
 
 .location-results {
-  background-color: #f5f5f5;
+  background-color: rgba(15, 23, 42, 0.6);
   padding: 1.5rem;
   border-radius: 4px;
   margin: 2rem 0;
 }
 
 .location-results h2 {
-  color: #333;
+  color: #fff;
   margin-bottom: 1rem;
 }
 
 .location-details {
-  background-color: white;
+  background-color: rgba(30, 41, 59, 0.8);
   padding: 1rem;
   border-radius: 4px;
   margin-bottom: 1rem;
+  border: 1px solid rgba(148, 163, 184, 0.1);
 }
 
 .location-details p {
   margin: 0.5rem 0;
-  color: #333;
+  color: #e2e8f0;
 }
 
 .view-on-map-button {
@@ -151,7 +162,7 @@
 .location-source {
   margin-top: 1rem !important;
   font-style: italic;
-  color: #666 !important;
+  color: #94a3b8 !important;
   font-family: inherit !important;
 }
 
@@ -190,8 +201,8 @@
 }
 
 .loading-message {
-  background-color: #e3f2fd;
-  color: #1565c0;
+  background-color: rgba(59, 130, 246, 0.1);
+  color: #60a5fa;
   padding: 1rem;
   border-radius: 4px;
   margin-bottom: 1rem;
@@ -245,4 +256,182 @@
 
 .backup-info button:hover {
   background-color: #0056b3;
+}
+
+/* Tablet Styles (768px and below) */
+@media (max-width: 768px) {
+  .location-tracker-container {
+    padding: 1.5rem;
+  }
+
+  .location-tracker-section {
+    max-width: 95%;
+    padding: 1.5rem;
+  }
+
+  .location-tracker-section h1 {
+    font-size: 1.75rem;
+  }
+
+  .map-container {
+    height: 400px;
+  }
+
+  .search-container {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .search-box {
+    width: 100%;
+  }
+
+  .coordinate-inputs {
+    flex-direction: row;
+    gap: 1rem;
+  }
+}
+
+/* Mobile Styles (480px and below) */
+@media (max-width: 480px) {
+  .location-tracker-container {
+    padding: 1rem;
+  }
+
+  .location-tracker-section {
+    padding: 1rem;
+    margin: 0;
+  }
+
+  .location-tracker-section h1 {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .map-container {
+    height: 300px;
+    margin-bottom: 1.5rem;
+  }
+
+  .search-container {
+    gap: 1rem;
+  }
+
+  .search-box {
+    padding: 1rem;
+  }
+
+  .search-box h3 {
+    font-size: 1rem;
+  }
+
+  .coordinate-inputs {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .coordinate-input {
+    width: 100%;
+  }
+
+  .location-dropdowns {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .state-dropdown,
+  .city-dropdown {
+    width: 100%;
+  }
+
+  .search-button {
+    width: 100%;
+  }
+
+  .location-info {
+    padding: 1rem;
+  }
+
+  .location-details {
+    padding: 0.75rem;
+  }
+
+  .location-details p {
+    font-size: 0.9rem;
+  }
+
+  .view-on-map-button {
+    padding: 0.75rem;
+    font-size: 0.95rem;
+  }
+
+  .error-message,
+  .permission-denied,
+  .loading-message {
+    padding: 0.75rem;
+    font-size: 0.9rem;
+  }
+}
+
+/* Small Mobile Styles (360px and below) */
+@media (max-width: 360px) {
+  .location-tracker-container {
+    padding: 0.75rem;
+  }
+
+  .location-tracker-section {
+    padding: 0.75rem;
+  }
+
+  .location-tracker-section h1 {
+    font-size: 1.25rem;
+  }
+
+  .map-container {
+    height: 250px;
+  }
+
+  .search-box {
+    padding: 0.75rem;
+  }
+
+  .location-info {
+    padding: 0.75rem;
+  }
+
+  .location-info h3 {
+    font-size: 0.95rem;
+  }
+
+  .location-info p,
+  .location-info ul {
+    font-size: 0.85rem;
+  }
+}
+
+/* Landscape Mode Styles */
+@media (max-height: 480px) and (orientation: landscape) {
+  .location-tracker-container {
+    padding: 1rem;
+    min-height: auto;
+  }
+
+  .map-container {
+    height: 200px;
+  }
+
+  .search-container {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .search-box {
+    width: calc(50% - 0.5rem);
+    padding: 1rem;
+  }
+
+  .location-info {
+    margin-top: 1rem;
+  }
 } 

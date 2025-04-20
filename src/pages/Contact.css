@@ -193,8 +193,21 @@
 /* Responsive Design */
 @media (max-width: 768px) {
   .contact-container {
-    margin: 1rem;
-    padding: 1rem;
+    padding: 2rem 1.5rem;
+  }
+
+  .contact-card {
+    max-width: 90%;
+    padding: 1.5rem;
+  }
+
+  .contact-header h1 {
+    font-size: 1.75rem;
+  }
+
+  .contact-info {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
   }
 
   .contact-methods {
@@ -211,5 +224,116 @@
 
   .contact-comments-section {
     margin-top: 2rem;
+  }
+}
+
+/* Mobile Styles (480px and below) */
+@media (max-width: 480px) {
+  .contact-container {
+    padding: 1.5rem 1rem;
+  }
+
+  .contact-card {
+    width: 95%;
+    padding: 1.25rem;
+  }
+
+  .contact-header h1 {
+    font-size: 1.5rem;
+  }
+
+  .contact-header p {
+    font-size: 0.95rem;
+  }
+
+  .contact-info {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .contact-form {
+    margin-top: 1.5rem;
+  }
+
+  .form-group {
+    margin-bottom: 1rem;
+  }
+
+  .form-label {
+    font-size: 0.95rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .form-input,
+  .form-textarea {
+    padding: 0.75rem;
+    font-size: 0.95rem;
+  }
+
+  .submit-button {
+    width: 100%;
+    padding: 0.75rem;
+    font-size: 1rem;
+  }
+
+  .info-item {
+    padding: 1rem;
+  }
+
+  .info-icon {
+    font-size: 1.25rem;
+  }
+
+  .info-text {
+    font-size: 0.95rem;
+  }
+}
+
+/* Small Mobile Styles (360px and below) */
+@media (max-width: 360px) {
+  .contact-container {
+    padding: 1rem 0.75rem;
+  }
+
+  .contact-card {
+    padding: 1rem;
+  }
+
+  .contact-header h1 {
+    font-size: 1.25rem;
+  }
+
+  .info-item {
+    padding: 0.75rem;
+  }
+
+  .info-icon {
+    font-size: 1.1rem;
+  }
+
+  .info-text {
+    font-size: 0.9rem;
+  }
+}
+
+/* Landscape Mode Styles */
+@media (max-height: 480px) and (orientation: landscape) {
+  .contact-container {
+    min-height: auto;
+    padding: 1rem;
+  }
+
+  .contact-card {
+    margin: 1rem 0;
+  }
+
+  .contact-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+
+  .contact-info {
+    margin-top: 0;
   }
 } 

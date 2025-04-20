@@ -18,7 +18,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(135deg, #0f172a, #1e293b);
+  background: linear-gradient(135deg, #0f172a, #000000);
   z-index: -2;
 }
 
@@ -210,27 +210,144 @@
   border-bottom: none;
 }
 
+/* Tablet Styles (768px and below) */
 @media (max-width: 768px) {
   .speed-test-container {
+    padding: 2rem 1.5rem;
+  }
+
+  .speed-test-card {
+    max-width: 90%;
+    padding: 1.5rem;
+  }
+
+  .speed-test-header h1 {
+    font-size: 1.75rem;
+  }
+
+  .speed-gauge {
+    width: 200px;
+    height: 200px;
+  }
+
+  .test-results {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+}
+
+/* Mobile Styles (480px and below) */
+@media (max-width: 480px) {
+  .speed-test-container {
+    padding: 1.5rem 1rem;
+  }
+
+  .speed-test-card {
+    width: 95%;
+    padding: 1.25rem;
+  }
+
+  .speed-test-header h1 {
+    font-size: 1.5rem;
+  }
+
+  .speed-test-header p {
+    font-size: 0.95rem;
+  }
+
+  .speed-gauge {
+    width: 180px;
+    height: 180px;
+  }
+
+  .speed-value {
+    font-size: 2rem;
+  }
+
+  .speed-unit {
+    font-size: 1rem;
+  }
+
+  .test-results {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+
+  .result-card {
+    padding: 1rem;
+  }
+
+  .result-value {
+    font-size: 1.25rem;
+  }
+
+  .test-button {
+    width: 100%;
+    padding: 0.75rem;
+    font-size: 1rem;
+  }
+}
+
+/* Small Mobile Styles (360px and below) */
+@media (max-width: 360px) {
+  .speed-test-container {
+    padding: 1rem 0.75rem;
+  }
+
+  .speed-test-card {
     padding: 1rem;
   }
 
   .speed-test-header h1 {
-    font-size: 2rem;
+    font-size: 1.25rem;
+  }
+
+  .speed-gauge {
+    width: 150px;
+    height: 150px;
+  }
+
+  .speed-value {
+    font-size: 1.75rem;
+  }
+
+  .result-card {
+    padding: 0.75rem;
+  }
+
+  .result-label {
+    font-size: 0.9rem;
+  }
+
+  .result-value {
+    font-size: 1.1rem;
+  }
+}
+
+/* Landscape Mode Styles */
+@media (max-height: 480px) and (orientation: landscape) {
+  .speed-test-container {
+    min-height: auto;
+    padding: 1rem;
   }
 
   .speed-test-card {
-    padding: 1.5rem;
+    margin: 1rem 0;
   }
 
-  .speed-metrics {
-    grid-template-columns: 1fr;
+  .test-content {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 1.5rem;
+    align-items: center;
   }
 
-  .table-header,
-  .table-row {
-    grid-template-columns: 1.5fr 1fr 1fr 1fr 1fr;
-    font-size: 0.9rem;
-    padding: 0.75rem;
+  .speed-gauge {
+    width: 150px;
+    height: 150px;
+  }
+
+  .test-results {
+    grid-template-columns: repeat(2, 1fr);
   }
 } 

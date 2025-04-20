@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
 import { indianStates, indianCities } from '../data/indianLocations';
 import './MapViewer.css';
+import LoadingSpinner from '../components/LoadingSpinner';
 
 const MapViewer = () => {
   const mapRef = useRef(null);
@@ -497,17 +498,19 @@ const MapViewer = () => {
     setIsDarkMode(!isDarkMode);
   };
 
+  if (isLoading) {
+    return (
+      <div className="map-container">
+        <LoadingSpinner size="large" text="Loading map data..." />
+      </div>
+    );
+  }
+
   return (
     <main>
       <section className="map-viewer-section">
         <h1>Azure Maps Viewer</h1>
         
-        {isLoading && (
-          <div className="loading-message">
-            Loading map...
-          </div>
-        )}
-
         {error && (
           <div className="error-message">
             {error}

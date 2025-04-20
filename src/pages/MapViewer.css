@@ -307,23 +307,145 @@
   margin-bottom: 0.5rem;
 }
 
+/* Tablet Styles (768px and below) */
 @media (max-width: 768px) {
-  .search-container {
-    grid-template-columns: 1fr;
+  .map-viewer-section {
+    padding: 1.5rem;
   }
-  
+
+  .map-viewer-section h1 {
+    font-size: 1.75rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .search-container {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .search-box {
+    width: 100%;
+  }
+
+  .map-container {
+    height: 400px;
+  }
+
+  .map-info {
+    padding: 1.5rem;
+  }
+}
+
+/* Mobile Styles (480px and below) */
+@media (max-width: 480px) {
+  .map-viewer-section {
+    padding: 1rem;
+  }
+
+  .map-viewer-section h1 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .search-box {
+    padding: 1rem;
+  }
+
+  .search-box h3 {
+    font-size: 1rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .location-dropdowns,
   .coordinate-inputs {
-    grid-template-columns: 1fr;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .state-dropdown,
+  .city-dropdown,
+  .coordinate-input {
+    width: 100%;
+    font-size: 0.95rem;
+  }
+
+  .search-button {
+    width: 100%;
+    margin-top: 0.75rem;
+  }
+
+  .map-container {
+    height: 300px;
+    margin: 1rem 0;
+  }
+
+  .map-info {
+    padding: 1rem;
+  }
+
+  .map-info h3 {
+    font-size: 1.1rem;
+  }
+
+  .map-info p,
+  .map-info ul {
+    font-size: 0.95rem;
   }
 
   .dark-mode-toggle {
+    right: 1rem;
+    top: 1rem;
     width: 35px;
     height: 35px;
+    font-size: 1.1rem;
+  }
+}
+
+/* Small Mobile Styles (360px and below) */
+@media (max-width: 360px) {
+  .map-viewer-section {
+    padding: 0.75rem;
+  }
+
+  .map-viewer-section h1 {
+    font-size: 1.25rem;
+  }
+
+  .search-box {
+    padding: 0.75rem;
+  }
+
+  .map-container {
+    height: 250px;
+  }
+
+  .map-info {
+    padding: 0.75rem;
+  }
+
+  .map-info h3 {
     font-size: 1rem;
   }
 
-  .map-dialogue {
-    max-width: 90%;
-    padding: 0.8rem 1.2rem;
+  .map-info p,
+  .map-info ul {
+    font-size: 0.9rem;
+  }
+}
+
+/* Landscape Mode Styles */
+@media (max-height: 480px) and (orientation: landscape) {
+  .map-container {
+    height: 200px;
+  }
+
+  .search-container {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .search-box {
+    width: calc(50% - 0.5rem);
   }
 } 
