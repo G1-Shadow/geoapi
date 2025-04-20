@@ -152,7 +152,7 @@ const MapViewer = () => {
     };
   }, []);
 
-  // When map is initialized and we have current location, update the map
+  
   useEffect(() => {
     if (map && currentLocation) {
       updateMapWithCoordinates(currentLocation.lat, currentLocation.lng);
