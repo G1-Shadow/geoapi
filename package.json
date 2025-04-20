@@ -1,5 +1,5 @@
 {
-  "name": "geoapi",
+  "name": "netintel",
   "version": "0.1.0",
   "private": true,
   "engines": {
@@ -41,5 +41,5 @@
       "last 1 safari version"
     ]
   },
-  "proxy": "http://localhost:8080"
+  "proxy": "https://netintel-app.onrender.com"
 }

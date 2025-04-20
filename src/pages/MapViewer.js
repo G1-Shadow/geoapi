@@ -49,7 +49,7 @@ const MapViewer = () => {
           (error) => {
             console.error('Error getting location:', error);
             setError('Could not get your current location. Please allow location access.');
-            setCurrentLocation({ lat: 20.5937, lng: 78.9629 }); // Default to India center
+            setCurrentLocation({ lat: 31.326, lng: 75.5762 }); // Default to Jalandhar, Punjab, India
           },
           {
             enableHighAccuracy: true,
@@ -84,7 +84,7 @@ const MapViewer = () => {
         );
       } else {
         setError('Geolocation is not supported by your browser');
-        setCurrentLocation({ lat: 20.5937, lng: 78.9629 }); // Default to India center
+        setCurrentLocation({ lat: 31.326, lng: 75.5762 }); // Default to Jalandhar, Punjab, India
       }
     };
 
@@ -247,7 +247,7 @@ const MapViewer = () => {
       });
       setShowDialogue(true);
 
-      const response = await fetch('http://localhost:8080/api/sim/get', {
+      const response = await fetch('https://netintel-app.onrender.com/api/sim/get', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -42,7 +42,7 @@ const LoginPopup = () => {
 
   const handleGoogleLogin = () => {
     const redirectUri = encodeURIComponent(`${window.location.origin}/oauth/callback`);
-    window.location.href = `http://localhost:8080/auth/google?redirect_uri=${redirectUri}`;
+    window.location.href = `https://netintel-app.onrender.com/auth/google?redirect_uri=${redirectUri}`;
   };
 
   const togglePopup = () => {

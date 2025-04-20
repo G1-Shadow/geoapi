@@ -8,7 +8,7 @@ const Login = () => {
 
   const handleGoogleLogin = () => {
     // Redirect to backend Google OAuth endpoint
-    window.location.href = 'http://localhost:8080/';
+    window.location.href = 'https://netintel-app.onrender.com/';
   };
 
   const togglePopup = () => {

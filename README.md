@@ -1,6 +1,6 @@
-# GeoApp - Location Tracking Application
+# NetIntel - Location Tracking Application
 
-A React application for tracking user location using Azure Maps.
+
 
 ## Features
 

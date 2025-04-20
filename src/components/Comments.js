@@ -19,7 +19,7 @@ const Comments = ({
   }, [postId]);
 
   const handleLogin = () => {
-    window.location.href = 'http://localhost:8080/oauth2/authorization/google';
+    window.location.href = 'https://netintel-app.onrender.com/oauth2/authorization/google';
   };
 
   const fetchComments = async () => {
@@ -33,8 +33,8 @@ const Comments = ({
       }
       
       const url = postId 
-        ? `http://localhost:8080/api/comments?postId=${postId}&limit=${maxComments}`
-        : `http://localhost:8080/api/comments?limit=${maxComments}`;
+          ? `https://netintel-app.onrender.com/api/comments?postId=${postId}&limit=${maxComments}`
+          : `https://netintel-app.onrender.com/api/comments?limit=${maxComments}`;
 
       const response = await fetch(url, {
         method: 'GET',
@@ -86,7 +86,7 @@ const Comments = ({
         return;
       }
 
-      const response = await fetch('http://localhost:8080/api/comments/add', {
+      const response = await fetch('https://netintel-app.onrender.com/api/comments/add', {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -140,7 +140,7 @@ const Comments = ({
         return;
       }
 
-      const response = await fetch(`http://localhost:8080/api/comments/${commentId}`, {
+      const response = await fetch(`https://netintel-app.onrender.com/api/comments/${commentId}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`,

@@ -10,7 +10,7 @@ export const AuthProvider = ({ children }) => {
     try {
       const token = localStorage.getItem('token');
       if (token) {
-        const response = await fetch('http://localhost:8080/api/user/me', {
+        const response = await fetch('https://netintel-app.onrender.com/api/user/me', {
           headers: {
             'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json'
