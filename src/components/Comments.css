@@ -135,10 +135,34 @@
 .comment-card {
   background-image: url('../imgs/Backgroundcom.png');
   background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
   border-radius: 16px;
   padding: 1.5rem;
   position: relative;
   transition: all 0.3s ease;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.comment-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(8, 12, 21, 0.75);
+  border-radius: 16px;
+  z-index: 0;
+}
+
+.comment-header,
+.comment-text,
+.delete-comment {
+  position: relative;
+  z-index: 1;
 }
 
 .comment-header {

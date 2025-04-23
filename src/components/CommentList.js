@@ -10,6 +10,19 @@ const CommentList = ({
   onDelete,
   formatDate 
 }) => {
+  const getProfileImage = (comment) => {
+    // If user has a Google profile picture
+    if (comment.user?.imageUrl) {
+      return comment.user.imageUrl;
+    }
+    // If user has a picture from profile section
+    if (comment.user?.profilePicture) {
+      return comment.user.profilePicture;
+    }
+    // Default to avatar placeholder
+    return null;
+  };
+
   return (
     <div className="comments-list">
       {isLoading && comments.length === 0 ? (
@@ -23,8 +36,16 @@ const CommentList = ({
           <div key={comment.id} className="comment-card">
             <div className="comment-header">
               <div className="comment-avatar">
-                {comment.user?.profilePicture ? (
-                  <img src={comment.user.profilePicture} alt={comment.userName} />
+                {getProfileImage(comment) ? (
+                  <img 
+                    src={getProfileImage(comment)} 
+                    alt={comment.userName} 
+                    onError={(e) => {
+                      e.target.onerror = null;
+                      e.target.style.display = 'none';
+                      e.target.parentElement.innerHTML = comment.userName?.charAt(0).toUpperCase();
+                    }}
+                  />
                 ) : (
                   <div className="avatar-placeholder">
                     {comment.userName?.charAt(0).toUpperCase()}
