@@ -2,6 +2,11 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
 import { indianStates, indianCities } from '../data/indianLocations';
 import './MapViewer.css';
+import LoadingSpinner from '../components/LoadingSpinner';
+import Comments from '../components/Comments';
+import Icon from '../imgs/Icon.png';
+import IconLoc from '../imgs/Iconloc.svg';
+import Arrow from '../imgs/Arrow.png';
 
 const MapViewer = () => {
   const mapRef = useRef(null);
@@ -152,12 +157,45 @@ const MapViewer = () => {
     };
   }, []);
 
-  
+  // Handle location data from LocationSearch
+  useEffect(() => {
+    if (location.state?.fromSearch) {
+      const { coordinates: coords, selectedState: state, selectedCity: city } = location.state;
+      
+      if (coords) {
+        setCoordinates({ 
+          lat: coords.lat.toString(), 
+          lng: coords.lng.toString() 
+        });
+        setCurrentLocation({ lat: coords.lat, lng: coords.lng });
+      }
+      
+      if (state) setSelectedState(state);
+      if (city) setSelectedCity(city);
+
+      // Clear the location state to prevent reusing old data
+      window.history.replaceState({}, document.title);
+    }
+  }, [location.state]);
+
+  // Update map and fetch data when coordinates change
   useEffect(() => {
     if (map && currentLocation) {
       updateMapWithCoordinates(currentLocation.lat, currentLocation.lng);
     }
   }, [map, currentLocation]);
+
+  // Update dropdowns when state/city changes
+  useEffect(() => {
+    if (selectedState) {
+      const stateSelect = document.querySelector('select[name="state"]');
+      if (stateSelect) stateSelect.value = selectedState;
+    }
+    if (selectedCity) {
+      const citySelect = document.querySelector('select[name="city"]');
+      if (citySelect) citySelect.value = selectedCity;
+    }
+  }, [selectedState, selectedCity]);
 
   useEffect(() => {
     if (map) {
@@ -268,11 +306,8 @@ const MapViewer = () => {
       setDialogueInfo({
         title: 'Network Information',
         content: `Location: [${data.location[0]}, ${data.location[1]}]
-                  Provider: ${data.provider}
-                  Network Score: ${data.score}/10
-                  
-                  Latitude: ${lat.toFixed(6)}
-                  Longitude: ${lng.toFixed(6)}`
+                  Best Provider: ${data.provider}
+                  Network Score: ${data.score}/5`
       });
 
       // Update state variables for sim provider and score
@@ -497,113 +532,234 @@ const MapViewer = () => {
   };
 
   return (
-    <main>
-      <section className="map-viewer-section">
-        <h1>Azure Maps Viewer</h1>
-        
-        {isLoading && (
-          <div className="loading-message">
-            Loading map...
-          </div>
-        )}
+    <div className="network-advisor">
+      <div className="container-fluid p-0">
+        <div className="row g-0">
+          <div className="col-md-4 mt-5 search-panel">
+            <div className="brand mb-4">
+              {/* <h1 className="mb-0">Net<span className="text-primary">Intel</span></h1> */}
+              <h1 className="network-title">Network <span className="text-primary">Advisor</span></h1>
+            </div>
 
-        {error && (
-          <div className="error-message">
-            {error}
-          </div>
-        )}
+            {/* Search by Coordinates */}
+            <div className="search-section">
+              <div className="search-header d-flex align-items-center justify-content-between mb-3">
+                <div className="d-flex align-items-center">
+                  <span className="search-label">SEARCH BY</span>
+                  <span className="search-type">COORDINATES</span>
+                </div>
+                <div className="search-icon">
+                  <img src={Arrow} alt="Coordinates icon" />
+                </div>
+              </div>
+              
+              <div className="coordinate-controls d-flex align-items-center gap-3">
+                
 
-        <div className="search-container">
-          <div className="search-box">
-            <h3>Search by Location</h3>
-            <div className="location-dropdowns">
-              <select
-                value={selectedState}
-                onChange={handleStateChange}
-                className="state-dropdown"
-                disabled={isLoading}
-              >
-                <option value="">Select State</option>
-                {indianStates.map(state => (
-                  <option key={state.code} value={state.code}>
-                    {state.name}
-                  </option>
-                ))}
-              </select>
+                <div className="coordinate-inputs-wrapper">
+                  <input
+                    type="text"
+                    className="coordinate-input"
+                    value={coordinates.lat}
+                    onChange={(e) => setCoordinates(prev => ({ ...prev, lat: e.target.value }))}
+                    placeholder="Latitude"
+                    disabled={isLoading}
+                  />
+                  <input
+                    type="text"
+                    className="coordinate-input"
+                    value={coordinates.lng}
+                    onChange={(e) => setCoordinates(prev => ({ ...prev, lng: e.target.value }))}
+                    placeholder="Longitude"
+                    disabled={isLoading}
+                  />
+                </div>
+                <button 
+                  className="circle-btn"
+                  onClick={() => navigator.geolocation.getCurrentPosition(
+                    pos => setCoordinates({
+                      lat: pos.coords.latitude.toString(),
+                      lng: pos.coords.longitude.toString()
+                    })
+                  )}
+                  disabled={isLoading}
+                >
+                  <img src={Icon} alt="Get location" />
+                </button>
 
-              <select
-                value={selectedCity}
-                onChange={handleCityChange}
-                className="city-dropdown"
-                disabled={!selectedState || isLoading}
-              >
-                <option value="">Select City</option>
-                {selectedState && indianCities[selectedState]?.map(city => (
-                  <option key={city.name} value={city.name}>
-                    {city.name}
-                  </option>
-                ))}
-              </select>
+                <button 
+                  className="submit-btn"
+                  onClick={handleCoordinateSearch}
+                  disabled={isLoading || !map}
+                >
+                  SUBMIT
+                </button>
+              </div>
+            </div>
+
+            {/* Search by Location */}
+            <div className="search-section">
+              <div className="search-header d-flex align-items-center justify-content-between mb-3">
+                <div className="d-flex align-items-center">
+                  <span className="search-label">SEARCH BY</span>
+                  <span className="search-type">LOCATION</span>
+                </div>
+                <div className="search-icon">
+                  <img src={Arrow} alt="Location icon" />
+                </div>
+              </div>
+              
+              <div className="location-controls d-flex align-items-center gap-3">
+                <input
+                  type="text"
+                  className="form-control location-input"
+                  value={selectedState ? indianStates.find(s => s.code === selectedState)?.name : ''}
+                  placeholder="Select State"
+                  readOnly
+                  onClick={(e) => {
+                    const dropdown = e.target.nextElementSibling;
+                    if (dropdown) dropdown.classList.toggle('show');
+                  }}
+                />
+                <div className="location-dropdown-menu">
+                  {indianStates.map(state => (
+                    <div 
+                      key={state.code}
+                      className="location-dropdown-item"
+                      onClick={(e) => {
+                        setSelectedState(state.code);
+                        setSelectedCity('');
+                        const dropdown = e.target.closest('.location-dropdown-menu');
+                        if (dropdown) {
+                          dropdown.classList.remove('show');
+                        }
+                      }}
+                    >
+                      {state.name}
+                    </div>
+                  ))}
+                </div>
+
+                <input
+                  type="text"
+                  className="form-control location-input"
+                  value={selectedCity}
+                  placeholder="Select City"
+                  readOnly
+                  disabled={!selectedState}
+                  onClick={(e) => {
+                    if (!selectedState) return;
+                    const dropdown = e.target.nextElementSibling;
+                    if (dropdown) dropdown.classList.toggle('show');
+                  }}
+                />
+                <div className="location-dropdown-menu">
+                  {selectedState && indianCities[selectedState]?.map(city => (
+                    <div 
+                      key={city.name}
+                      className="location-dropdown-item"
+                      onClick={(e) => {
+                        const dropdown = e.target.closest('.location-dropdown-menu');
+                        if (dropdown) {
+                          dropdown.classList.remove('show');
+                        }
+                        
+                        setSelectedCity(city.name);
+                        const lat = parseFloat(city.lat);
+                        const lng = parseFloat(city.lng);
+                        
+                        if (!isNaN(lat) && !isNaN(lng)) {
+                          setCoordinates({
+                            lat: lat.toString(),
+                            lng: lng.toString()
+                          });
+                          
+                          // Set initial dialogue info before updating map
+                          setDialogueInfo({
+                            title: 'Location Information',
+                            content: `Latitude: ${lat.toFixed(6)}
+                            Longitude: ${lng.toFixed(6)}
+                            Loading network data...`
+                          });
+                          setShowDialogue(true);
+                          
+                          // Update map with coordinates
+                          updateMapWithCoordinates(lat, lng);
+                        }
+                      }}
+                    >
+                      {city.name}
+                    </div>
+                  ))}
+                </div>
+
+                <button 
+                  className="btn submit-btn"
+                  onClick={() => {
+                    if (selectedState && selectedCity) {
+                      const city = indianCities[selectedState].find(c => c.name === selectedCity);
+                      if (city) {
+                        const lat = parseFloat(city.lat);
+                        const lng = parseFloat(city.lng);
+                        if (!isNaN(lat) && !isNaN(lng)) {
+                          updateMapWithCoordinates(lat, lng);
+                        }
+                      }
+                    }
+                  }}
+                  disabled={!selectedCity}
+                >
+                  SUBMIT
+                </button>
+              </div>
             </div>
           </div>
 
-          <div className="search-box">
-            <h3>Search by Coordinates</h3>
-            <div className="coordinate-inputs">
-              <input
-                type="text"
-                value={coordinates.lat}
-                onChange={(e) => setCoordinates({ ...coordinates, lat: e.target.value })}
-                placeholder="Latitude (-90 to 90)"
-                className="coordinate-input"
-                disabled={isLoading}
-              />
-              <input
-                type="text"
-                value={coordinates.lng}
-                onChange={(e) => setCoordinates({ ...coordinates, lng: e.target.value })}
-                placeholder="Longitude (-180 to 180)"
-                className="coordinate-input"
-                disabled={isLoading}
-              />
+          <div className="col-md-8 map-panel">
+            {isLoading && <LoadingSpinner />}
+            
+            {error && (
+              <div className="alert alert-danger m-3">
+                {error}
+              </div>
+            )}
+
+            <div className="map-container">
+              <div ref={mapRef} className="map-view" />
+              {/* <button 
+                className={`theme-toggle ${isDarkMode ? 'active' : ''}`}
+                onClick={toggleDarkMode}
+                title={isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+              >
+                {isDarkMode ? '🌞' : '🌙'}
+              </button> */}
             </div>
-            <button 
-              onClick={handleCoordinateSearch} 
-              className="search-button"
-              disabled={isLoading || !map}
-            >
-              Search Coordinates
-            </button>
+
+            <div className="map-disclaimer text-center mt-3">
+              *The above advisory is not sponsored and is offered purely for charity.
+            </div>
+
+            <div className="about-model mt-4">
+              <button className="btn btn-outline-light">About Model</button>
+              <div className="model-info mt-3">
+                <p>
+                  We leveraged a hybrid intelligence system that combines a rule-based heuristic engine
+                  (2.4 million+ rows, 17+ features) with a machine learning model trained on 16 million+
+                  recent samples (2022-2023). The model, powered by Random Forest and optimized for
+                  performance, achieved low RMSE, ensuring highly reliable predictions. This fusion of
+                  domain logic and data-driven learning delivers the most accurate SIM provider
+                  recommendations tailored to real-world conditions.
+                </p>
+              </div>
+            </div>
+
+            <div className="map-comments mt-4">
+              <Comments maxComments={5} showLoginPrompt={true} />
+            </div>
           </div>
         </div>
-
-        <div className="map-container" style={{ position: 'relative', height: '500px' }}>
-          <div ref={mapRef} style={{ width: '100%', height: '100%' }} />
-          <button 
-            className={`dark-mode-toggle ${isDarkMode ? 'active' : ''}`}
-            onClick={toggleDarkMode}
-            title={isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
-            aria-label={isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
-          >
-            {isDarkMode ? '🌞' : '🌙'}
-          </button>
-        </div>
-
-        <div className="map-info">
-          <h3>About the Map Viewer</h3>
-          <p>
-            Use this tool to search for locations in India:
-          </p>
-          <ul>
-            <li>Select a state and city from the dropdowns to view its location</li>
-            <li>Enter latitude and longitude coordinates to jump to a specific point</li>
-            <li>Click and drag to pan the map</li>
-            <li>Use the mouse wheel to zoom in and out</li>
-            <li>Toggle between light and dark mode using the button in the top right corner</li>
-          </ul>
-        </div>
-      </section>
-    </main>
+      </div>
+    </div>
   );
 };
 

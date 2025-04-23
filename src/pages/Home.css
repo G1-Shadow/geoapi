@@ -23,6 +23,8 @@
 
 /* Hero Section */
 .hero {
+  position: relative;
+  /* height: 100vh; */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -35,23 +37,31 @@
 
 .hero-content {
   max-width: 800px;
+  margin: 0 auto;
+  z-index: 1;
 }
 
-.hero-content h1 {
-  font-size: 4rem;
-  line-height: 1.2;
+.hero h1 {
+  font-size: 6rem;
+  
+  font-weight: bold;
   margin-bottom: 1.5rem;
-  color: var(--text-primary);
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-  font-weight: 700;
 }
 
-.hero-content p {
+.hero h1 span {
+  color: #4299e1;
+}
+
+.hero p {
   font-size: 1.5rem;
-  line-height: 1.6;
-  color: var(--text-secondary);
-  margin-bottom: 2.5rem;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  margin-bottom: 2rem;
+  opacity: 0.63;
+}
+
+.hero-search {
+  margin-top: 2rem;
+  width: 100%;
+  max-width: 800px;
 }
 
 .hero-buttons {
@@ -203,24 +213,16 @@
 
 /* Responsive Design */
 @media (max-width: 768px) {
-  .hero {
-    padding: 6rem 1.5rem;
-  }
-
-  .hero-content h1 {
+  .hero h1 {
     font-size: 3rem;
   }
 
-  .hero-content p {
+  .hero p {
     font-size: 1.25rem;
   }
 
-  .features {
-    padding: 4rem 1.5rem;
-  }
-
-  .features h2 {
-    font-size: 2.5rem;
+  .features-grid {
+    grid-template-columns: 1fr;
   }
 
   .cta {
@@ -233,8 +235,12 @@
 }
 
 @media (max-width: 480px) {
-  .hero-content h1 {
+  .hero h1 {
     font-size: 2.5rem;
+  }
+
+  .hero p {
+    font-size: 1.1rem;
   }
 
   .hero-buttons {
@@ -305,17 +311,6 @@
 
 .tool-button:hover {
   background-color: #0056b3;
-}
-
-.hero h1 {
-  font-size: 5rem;
-  font-weight: 700;
-  margin-bottom: 1rem;
-  color: #e2e8f0;
-}
-
-.hero h1 span {
-  color: #3b82f6;
 }
 
 /* Tablet Styles (768px and below) */

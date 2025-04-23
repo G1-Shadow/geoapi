@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import CommentList from './CommentList';
 import './Comments.css';
+import people from '../imgs/People.svg';
 
 const Comments = ({ 
   postId, // Optional: If comments are associated with a specific post
@@ -183,12 +184,21 @@ const Comments = ({
 
   return (
     <div className="comments-container">
-      <h2>Comments</h2>
+      <div className="comments-header">
+        <h2>Comments</h2>
+        <div className="user-avatars">
+          <img src={people} alt="User Avatar" />
+        </div>
+        <div className="satisfaction-rating">
+          <span className="rating-number">98%</span>
+          <span className="rating-text">Users Satisfaction</span>
+        </div>
+      </div>
       
       {!user && showLoginPrompt ? (
         <div className="comments-login-message">
           <p>Please login to post comments</p>
-          <button onClick={handleLogin} className="login-button">
+          <button onClick={handleLogin} className="login-button2">
             Login with Google
           </button>
         </div>

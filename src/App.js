@@ -114,45 +114,56 @@ const OAuthCallback = () => {
 const Navbar = () => {
   const location = useLocation();
   const { user } = useAuth();
+  const [isVisible, setIsVisible] = useState(true);
+  const [prevScrollPos, setPrevScrollPos] = useState(window.pageYOffset);
 
   // Get profile picture URL from the appropriate field
   const profilePicture = user?.imageUrl || user?.picture || user?.profilePicture;
 
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollPos = window.pageYOffset;
+      const isScrollingDown = prevScrollPos < currentScrollPos;
+      
+      setIsVisible(!isScrollingDown || currentScrollPos < 10);
+      setPrevScrollPos(currentScrollPos);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [prevScrollPos]);
+
   return (
-    <nav className="navbar">
+    <nav className={`navbar ${!isVisible ? 'hidden' : ''}`}>
       <div className="navbar-container">
         <div className="navbar-brand">
           <Link to="/" className="brand-logo">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="brand-icon" width="24" height="24">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#00D1FF" className="brand-icon" width="24" height="24">
               <path fillRule="evenodd" d="M14.615 1.595a.75.75 0 0 1 .359.852L12.982 9.75h7.268a.75.75 0 0 1 .548 1.262l-10.5 11.25a.75.75 0 0 1-1.272-.71l1.992-7.302H3.75a.75.75 0 0 1-.548-1.262l10.5-11.25a.75.75 0 0 1 .913-.143Z" clipRule="evenodd" />
             </svg>
-            Net<span>Intel</span>
+            <span className="brand-text">Net<span>Intel</span></span>
           </Link>
         </div>
         
         <div className="navbar-links">
           <Link to="/" className={`nav-link ${location.pathname === '/' ? 'active' : ''}`}>
-            Home 
+            Home
           </Link>
-          <img src={arrowIcon} alt="arrow" />
-          <Link to="/location" className={`nav-link ${location.pathname === '/location' ? 'active' : ''}`}>
-            Location Tracker 
-          </Link>
-          <img src={arrowIcon} alt="arrow" />
+          <img src={arrowIcon} alt="arrow" className="nav-arrow" />
           <Link to="/speed-test" className={`nav-link ${location.pathname === '/speed-test' ? 'active' : ''}`}>
-            Speed Test 
+            Speed Test
           </Link>
-          <img src={arrowIcon} alt="arrow" />
-          <Link to="/map" className={`nav-link ${location.pathname === '/map' ? 'active' : ''}`}>
-            Map Viewer 
+          <img src={arrowIcon} alt="arrow" className="nav-arrow" />
+          <Link to="/Network-Advisor" className={`nav-link ${location.pathname === '/Network-Advisor' ? 'active' : ''}`}>
+            Network Advisor
           </Link>
-          <img src={arrowIcon} alt="arrow" />
+          <img src={arrowIcon} alt="arrow" className="nav-arrow" />
           <Link to="/plans" className={`nav-link ${location.pathname === '/plans' ? 'active' : ''}`}>
-            Plans 
+            Plans
           </Link>
-          <img src={arrowIcon} alt="arrow" />
+          <img src={arrowIcon} alt="arrow" className="nav-arrow" />
           <Link to="/contact" className={`nav-link ${location.pathname === '/contact' ? 'active' : ''}`}>
-            Contact 
+            Contact
           </Link>
         </div>
 
@@ -201,9 +212,9 @@ const App = () => {
           <main>
             <Routes>
               <Route path="/" element={<PageWrapper><Home /></PageWrapper>} />
-              <Route path="/location" element={<PageWrapper><LocationTracker /></PageWrapper>} />
+              {/* <Route path="/location" element={<PageWrapper><LocationTracker /></PageWrapper>} /> */}
               <Route path="/speed-test" element={<PageWrapper><SpeedTest /></PageWrapper>} />
-              <Route path="/map" element={<PageWrapper><MapViewer /></PageWrapper>} />
+              <Route path="/Network-Advisor" element={<PageWrapper><MapViewer /></PageWrapper>} />
               <Route path="/contact" element={<PageWrapper><Contact /></PageWrapper>} />
               <Route path="/plans" element={<PageWrapper><Plans /></PageWrapper>} />
               <Route path="/profile" element={<Profile />} />

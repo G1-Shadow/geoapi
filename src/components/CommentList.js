@@ -18,29 +18,38 @@ const CommentList = ({
           {error ? error : "No comments yet. Be the first to comment!"}
         </div>
       ) : (
-        comments.map((comment, index) => (
+        comments.map((comment) => (
           <div key={comment.id} className="comment-card">
             <div className="comment-header">
-              <div className="comment-number">#{index + 1}</div>
-              <div className="comment-info">
-                <div className="comment-author-time">
-                  <span className="comment-author">{comment.userName}</span>
-                  <span className="comment-time">{formatDate(comment.createdAt)}</span>
-                </div>
-                {(user && (user.id === comment.user.id || user.accountType === 'ADMIN')) && (
-                  <button 
-                    onClick={() => onDelete(comment.id)}
-                    className="delete-comment"
-                    disabled={isLoading}
-                  >
-                    Delete
-                  </button>
+              <div className="comment-avatar">
+                {comment.user?.profilePicture ? (
+                  <img src={comment.user.profilePicture} alt={comment.userName} />
+                ) : (
+                  <div className="avatar-placeholder">
+                    {comment.userName?.charAt(0).toUpperCase()}
+                  </div>
                 )}
+              </div>
+              <div className="comment-info">
+                <div className="comment-author">{comment.userName}</div>
+                <div className="comment-meta">
+                  {formatDate(comment.createdAt)}
+                </div>
               </div>
             </div>
             <div className="comment-text">
               {comment.commentText}
             </div>
+            {(user && (user.id === comment.user?.id || user.roles?.includes('ADMIN'))) && (
+              <button 
+                onClick={() => onDelete(comment.id)}
+                className="delete-comment"
+                disabled={isLoading}
+                title="Delete comment"
+              >
+                ×
+              </button>
+            )}
           </div>
         ))
       )}
