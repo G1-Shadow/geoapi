@@ -11,7 +11,7 @@ const LocationSearch = ({ onLocationSelect }) => {
 
   const navigateToMap = () => {
     if (coordinates.lat && coordinates.lng) {
-      navigate('/map', { 
+      navigate('/Network-Advisor', { 
         state: { 
           coordinates: {
             lat: parseFloat(coordinates.lat),
