@@ -19,6 +19,9 @@ const CommentList = ({
     if (comment.user?.profilePicture) {
       return comment.user.profilePicture;
     }
+    if (comment.user?.picture) {
+      return comment.user.picture;
+    }
     // Default to avatar placeholder
     return null;
   };
