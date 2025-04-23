@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, useLocation, useNavigate, Navigate } from 'react-router-dom';
-import LocationTracker from './pages/LocationTracker';
+// import LocationTracker from './pages/LocationTracker';
 import SpeedTest from './pages/SpeedTest';
 import Contact from './pages/Contact';
 import Home from './pages/Home';

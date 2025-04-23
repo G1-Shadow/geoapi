@@ -26,6 +26,7 @@ export const AuthProvider = ({ children }) => {
   const fetchUserData = async () => {
     try {
       const response = await api.get('/user/me');
+      console.log(response.data);
       setUser(response.data);
     } catch (error) {
       // If access token is expired, try to refresh it
