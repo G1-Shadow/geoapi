@@ -1,5 +1,6 @@
 import React from 'react';
 import './Comments.css';
+import deletemsg from '../imgs/deletemsg.png'
 
 const CommentList = ({ 
   comments, 
@@ -47,7 +48,7 @@ const CommentList = ({
                 disabled={isLoading}
                 title="Delete comment"
               >
-                ×
+                <img src={deletemsg} alt="delete" height="20" width="20" />
               </button>
             )}
           </div>

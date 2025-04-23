@@ -133,7 +133,8 @@
 }
 
 .comment-card {
-  background: rgb(24, 24, 24);
+  background-image: url('../imgs/Backgroundcom.png');
+  background-size: cover;
   border-radius: 16px;
   padding: 1.5rem;
   position: relative;
