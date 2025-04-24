@@ -238,8 +238,8 @@
 }
 
 .delete-comment img {
-  width: 18px;
-  height: 18px;
+  width: 36px;
+  height: 36px;
   /* filter: brightness(0) invert(1); */
   opacity: 0.9;
   transition: all 0.2s ease;
