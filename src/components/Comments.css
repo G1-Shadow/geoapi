@@ -138,7 +138,7 @@
   background-position: center;
   background-repeat: no-repeat;
   border-radius: 16px;
-  padding: 1.5rem;
+  padding: 1.5rem 1.5rem 3rem 1.5rem;
   position: relative;
   transition: all 0.3s ease;
   border: 1px solid rgba(255, 255, 255, 0.1);
@@ -214,36 +214,41 @@
 
 .delete-comment {
   position: absolute;
-  top: 1rem;
+  bottom: 1rem;
   right: 1rem;
-  /* background: rgba(239, 68, 68, 0.2); */
-  /* border: 1px solid rgba(199, 42, 42, 0.806); */
-  object-fit: contain;
-  border-radius: 8px;
-  padding: 0.5rem;
+  width: 36px;
+  height: 36px;
+  background: rgba(239, 68, 68, 0.2);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 50%;
+  padding: 0;
   cursor: pointer;
   transition: all 0.2s ease;
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 2;
+  overflow: hidden;
 }
 
 .delete-comment:hover {
-  /* background: rgba(239, 68, 68, 0.3); */
+  background: rgba(239, 68, 68, 0.3);
   transform: scale(1.1);
+  border-color: rgba(239, 68, 68, 0.5);
 }
 
 .delete-comment img {
-  width: 40px;
-  height: 40px;
+  width: 18px;
+  height: 18px;
   /* filter: brightness(0) invert(1); */
-  opacity: 1;
-  transition: opacity 0.2s ease;
+  opacity: 0.9;
+  transition: all 0.2s ease;
+  object-fit: contain;
 }
 
 .delete-comment:hover img {
   opacity: 1;
+  transform: scale(1.1);
 }
 
 .error-message {
@@ -296,7 +301,7 @@
   }
 
   .comment-card {
-    padding: 1rem;
+    padding: 1rem 1rem 2.5rem 1rem;
   }
 
   .comment-text {
@@ -304,8 +309,13 @@
   }
 
   .delete-comment {
-    top: 1rem;
-    right: 1rem;
+    width: 32px;
+    height: 32px;
+  }
+
+  .delete-comment img {
+    width: 16px;
+    height: 16px;
   }
 }
 
