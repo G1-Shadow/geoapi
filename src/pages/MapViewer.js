@@ -221,6 +221,19 @@ const MapViewer = () => {
     }
   }, [map, isDarkMode]);
 
+  // Update the dialogueInfo state when coordinates change
+  useEffect(() => {
+    if (coordinates.lat && coordinates.lng) {
+      setDialogueInfo({
+        title: 'Location Information',
+        content: `Latitude: ${parseFloat(coordinates.lat).toFixed(6)}
+Longitude: ${parseFloat(coordinates.lng).toFixed(6)}
+Fetching network data...`
+      });
+      setShowDialogue(true);
+    }
+  }, [coordinates]);
+
   const initializeMap = (key) => {
     try {
       if (!mapRef.current) {
@@ -269,70 +282,6 @@ const MapViewer = () => {
       console.error('Error initializing map:', error);
       setError(`Failed to initialize map: ${error.message}`);
       setIsLoading(false);
-    }
-  };
-
-  // Function to fetch sim data from backend
-  const fetchSimData = async (lat, lng) => {
-    try {
-      if (!currentPopup) {
-        console.error('No popup available to update');
-        return;
-      }
-
-      const response = await fetch('https://netintel-app.onrender.com/api/sim/get', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          latitude: lat,
-          longitude: lng
-        })
-      });
-
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-
-      const data = await response.json();
-      console.log('Received SIM data:', data);
-
-      // Update popup content with the new data
-      const content = `
-        <div class="map-dialogue">
-          <h3>Network Information</h3>
-          <p>Location: [${lat.toFixed(6)}, ${lng.toFixed(6)}]
-Best Provider: ${data.provider}
-Network Score: ${data.score}/5</p>
-        </div>
-      `;
-      
-      if (currentPopup) {
-        currentPopup.setOptions({
-          content: content
-        });
-      }
-
-      // Update state variables
-      setBestSimProvider(data.provider);
-      setSimScore(data.score);
-
-    } catch (error) {
-      console.error('Error fetching sim data:', error);
-      if (currentPopup) {
-        currentPopup.setOptions({
-          content: `
-            <div class="map-dialogue">
-              <h3>Error</h3>
-              <p>Could not fetch network information.
-                
-Latitude: ${lat.toFixed(6)}
-Longitude: ${lng.toFixed(6)}</p>
-            </div>
-          `
-        });
-      }
     }
   };
 
@@ -400,31 +349,23 @@ Longitude: ${lng.toFixed(6)}</p>
         duration: 1000
       });
 
-      // Create popup
+      // Create and show initial popup
       const popup = new window.atlas.Popup({
         position: [longitude, latitude],
         pixelOffset: [0, -30],
         closeButton: false,
-        content: document.createElement('div')
-      });
-
-      // Set initial content
-      const content = `
-        <div class="map-dialogue">
-          <h3>Location Information</h3>
-          <p>Latitude: ${latitude.toFixed(6)}
+        content: `
+          <div class="map-dialogue">
+            <h3>Location Information</h3>
+            <p>Latitude: ${latitude.toFixed(6)}
 Longitude: ${longitude.toFixed(6)}
 Fetching network data...</p>
-        </div>
-      `;
-      popup.setOptions({
-        content: content
+          </div>
+        `
       });
 
-      // Open popup
       popup.open(map);
       setCurrentPopup(popup);
-      setShowDialogue(true);
 
       // Fetch and display network data
       fetchSimData(latitude, longitude);
@@ -433,6 +374,84 @@ Fetching network data...</p>
       console.error('Error updating map:', error);
       setError(error.message || 'Failed to update map with coordinates');
       setShowDialogue(false);
+    }
+  };
+
+  const fetchSimData = async (lat, lng) => {
+    try {
+      if (!currentPopup) {
+        console.error('No popup available to update');
+        return;
+      }
+
+      const response = await fetch('https://netintel-app.onrender.com/api/sim/get', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          latitude: lat,
+          longitude: lng
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+
+      const data = await response.json();
+      console.log('Received SIM data:', data);
+
+      // Update both state and popup content
+      setDialogueInfo({
+        title: 'Network Information',
+        content: `Location: [${lat.toFixed(6)}, ${lng.toFixed(6)}]
+Best Provider: ${data.provider}
+Network Score: ${data.score}/5`
+      });
+
+      // Update popup content
+      if (currentPopup) {
+        currentPopup.setOptions({
+          content: `
+            <div class="map-dialogue">
+              <h3>Network Information</h3>
+              <p>Location: [${lat.toFixed(6)}, ${lng.toFixed(6)}]
+Best Provider: ${data.provider}
+Network Score: ${data.score}/5</p>
+            </div>
+          `
+        });
+      }
+
+      setBestSimProvider(data.provider);
+      setSimScore(data.score);
+
+    } catch (error) {
+      console.error('Error fetching sim data:', error);
+      const errorContent = `
+        <div class="map-dialogue">
+          <h3>Error</h3>
+          <p>Could not fetch network information.
+            
+Latitude: ${lat.toFixed(6)}
+Longitude: ${lng.toFixed(6)}</p>
+        </div>
+      `;
+
+      setDialogueInfo({
+        title: 'Error',
+        content: `Could not fetch network information.
+        
+Latitude: ${lat.toFixed(6)}
+Longitude: ${lng.toFixed(6)}`
+      });
+
+      if (currentPopup) {
+        currentPopup.setOptions({
+          content: errorContent
+        });
+      }
     }
   };
 

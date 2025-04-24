@@ -151,12 +151,19 @@ const Comments = ({
       });
 
       if (response.status === 401) {
+        setError('Unauthorized. Please login again.');
         handleLogin();
         return;
       }
 
+      if (response.status === 403) {
+        setError('You do not have permission to delete this comment.');
+        return;
+      }
+
       if (!response.ok) {
-        throw new Error('Failed to delete comment');
+        const errorData = await response.text();
+        throw new Error(errorData || 'Failed to delete comment');
       }
 
       setComments(prevComments => 
@@ -164,8 +171,8 @@ const Comments = ({
       );
       setError(null);
     } catch (err) {
-      setError('Failed to delete comment');
       console.error('Error deleting comment:', err);
+      setError(err.message || 'Failed to delete comment. Please try again.');
     } finally {
       setIsLoading(false);
     }

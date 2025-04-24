@@ -1,30 +1,31 @@
 import React from 'react';
-import { useNavigate, Navigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import './Profile.css';
 
 const Profile = () => {
   const { user, logout } = useAuth();
-  const navigate = useNavigate();
 
-  console.log('User data:', user); // Debug log to check user data structure
+  const formatRole = (roles) => {
+    if (!roles || roles.length === 0) return 'User';
+    
+    // Filter out ROLE_ prefix and format roles
+    const formattedRoles = roles.map(role => role.replace('ROLE_', ''));
+    
+    // If user has ADMIN role, show it first
+    if (formattedRoles.includes('ADMIN')) {
+      return 'Admin';
+    }
+    
+    return formattedRoles.join(', ');
+  };
+
+  const getInitial = () => {
+    return user?.name ? user.name.charAt(0).toUpperCase() : '?';
+  };
 
   const handleLogout = () => {
     logout();
-    navigate('/');
-  };
-
-  if (!user) {
-    return <Navigate to="/" />;
-  }
-
-  // Get profile picture URL from the appropriate field
-  const profilePicture = user.imageUrl || user.picture || user.profilePicture;
-
-  // Function to format role for display
-  const formatRole = (role) => {
-    if (!role) return 'User';
-    return role.charAt(0).toUpperCase() + role.slice(1).toLowerCase();
+    window.location.href = '/';
   };
 
   return (
@@ -32,38 +33,36 @@ const Profile = () => {
       <div className="profile-card">
         <div className="profile-header">
           <div className="profile-avatar">
-            {profilePicture ? (
-              <img src={profilePicture} alt="Profile" />
+            {user?.picture ? (
+              <img src={user.picture} alt={user.name} />
             ) : (
-              <div className="avatar-placeholder">
-                {user.name.charAt(0).toUpperCase()}
-              </div>
+              <div className="avatar-placeholder">{getInitial()}</div>
             )}
           </div>
-          <h1>{user.name}</h1>
-          <p className="email">{user.email}</p>
+          <h1>{user?.name || 'User'}</h1>
+          <p className="email">{user?.email}</p>
         </div>
 
         <div className="profile-details">
           <div className="detail-item">
             <span className="label">Role</span>
-            <span className="value">{formatRole(user.role)}</span>
+            <span className="value role-badge">{formatRole(user?.roles)}</span>
           </div>
           <div className="detail-item">
             <span className="label">Member Since</span>
             <span className="value">
-              {new Date(user.createdAt).toLocaleDateString()}
+              {user?.createdAt ? new Date(user.createdAt).toLocaleDateString() : 'Invalid Date'}
             </span>
           </div>
           <div className="detail-item">
             <span className="label">Last Login</span>
             <span className="value">
-              {new Date(user.lastLogin).toLocaleDateString()}
+              {user?.lastLogin ? new Date(user.lastLogin).toLocaleDateString() : 'Invalid Date'}
             </span>
           </div>
         </div>
 
-        <button className="logout-button" onClick={handleLogout}>
+        <button onClick={handleLogout} className="logout-button">
           Logout
         </button>
       </div>

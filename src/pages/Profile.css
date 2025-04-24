@@ -251,4 +251,22 @@
   .profile-details {
     margin: 1rem 0;
   }
+}
+
+.role-badge {
+  color: #00D1FF;
+  font-weight: 600;
+  text-transform: capitalize;
+  padding: 0.25rem 1rem;
+  background: rgba(0, 209, 255, 0.1);
+  border-radius: 20px;
+  border: 1px solid rgba(0, 209, 255, 0.2);
+  display: inline-block;
+}
+
+/* Special styling for Admin role */
+.role-badge:contains("Admin") {
+  color: #FFD700;
+  background: rgba(255, 215, 0, 0.1);
+  border-color: rgba(255, 215, 0, 0.2);
 } 

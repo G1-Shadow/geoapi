@@ -26,6 +26,8 @@ const CommentList = ({
     return null;
   };
 
+  const isAdmin = user?.roles?.some(role => role === "ROLE_ADMIN");
+
   return (
     <div className="comments-list">
       {isLoading && comments.length === 0 ? (
@@ -65,7 +67,7 @@ const CommentList = ({
             <div className="comment-text">
               {comment.commentText}
             </div>
-            {(user && (user.id === comment.user?.id || user.roles?.includes('ADMIN'))) && (
+            {(user && (user.id === comment.user?.id || isAdmin)) && (
               <button 
                 onClick={() => onDelete(comment.id)}
                 className="delete-comment"
