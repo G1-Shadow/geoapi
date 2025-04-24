@@ -2,9 +2,9 @@
   max-width: 800px;
   margin: 2rem auto;
   padding: 1.5rem;
-  background: rgb(8, 12, 21);
+  background: transparent;
   border-radius: 12px;
-  backdrop-filter: blur(10px);
+  /* backdrop-filter: blur(10px); */
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
@@ -91,7 +91,7 @@
   min-height: 100px;
   padding: 1rem;
   margin-bottom: 1rem;
-  background: rgba(30, 41, 59, 0.5);
+  background: rgba(11, 17, 25, 0.945);
   border: 1px solid rgba(148, 163, 184, 0.2);
   border-radius: 8px;
   color: #e2e8f0;
@@ -142,7 +142,6 @@
   position: relative;
   transition: all 0.3s ease;
   border: 1px solid rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
@@ -154,8 +153,10 @@
   right: 0;
   bottom: 0;
   background-image: url('../imgs/Backgroundcom.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
   border: 1px solid rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   border-radius: 16px;
   z-index: 0;
@@ -249,7 +250,7 @@
   text-align: center;
   color: #94a3b8;
   padding: 2rem;
-  background: rgba(30, 41, 59, 0.3);
+  background: rgb(2, 3, 5);
   border-radius: 8px;
 }
 

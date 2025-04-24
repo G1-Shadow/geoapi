@@ -1,5 +1,9 @@
 import React, { useState } from 'react';
 import './Pricing.css';
+import jio from '../imgs/jio.svg'
+import airtel from '../imgs/airtel.svg'
+import vi from '../imgs/vi.svg'
+import bsnl from '../imgs/bsnl.svg'
 
 const Plans = () => {
   const [selectedPlan, setSelectedPlan] = useState(null);
@@ -7,7 +11,7 @@ const Plans = () => {
   const carrierPlans = [
     {
       carrier: 'Jio',
-      logo: '🔵', // Replace with actual logo
+      logo: <img src={jio} alt="Jio" />, // Replace with actual logo
       price: '₹299',
       validity: '28 days',
       data: '2GB/day',
@@ -23,7 +27,7 @@ const Plans = () => {
     },
     {
       carrier: 'Airtel',
-      logo: '🔴', // Replace with actual logo
+      logo: <img src={airtel} alt="Airtel" />, // Replace with actual logo
       price: '₹299',
       validity: '28 days',
       data: '1.5GB/day',
@@ -39,7 +43,7 @@ const Plans = () => {
     },
     {
       carrier: 'VI',
-      logo: '🟡', // Replace with actual logo
+      logo: <img src={vi} alt="VI" />, // Replace with actual logo
       price: '₹299',
       validity: '28 days',
       data: '1.5GB/day',
@@ -55,7 +59,7 @@ const Plans = () => {
     },
     {
       carrier: 'BSNL',
-      logo: '⚪', // Replace with actual logo
+      logo: <img src={bsnl} alt="BSNL" />, // Replace with actual logo
       price: '₹247',
       validity: '30 days',
       data: '1GB/day',

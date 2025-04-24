@@ -21,6 +21,12 @@ const Profile = () => {
   // Get profile picture URL from the appropriate field
   const profilePicture = user.imageUrl || user.picture || user.profilePicture;
 
+  // Function to format role for display
+  const formatRole = (role) => {
+    if (!role) return 'User';
+    return role.charAt(0).toUpperCase() + role.slice(1).toLowerCase();
+  };
+
   return (
     <div className="profile-container">
       <div className="profile-card">
@@ -40,8 +46,8 @@ const Profile = () => {
 
         <div className="profile-details">
           <div className="detail-item">
-            <span className="label">Account Type</span>
-            <span className="value">{user.accountType || 'Free'}</span>
+            <span className="label">Role</span>
+            <span className="value">{formatRole(user.role)}</span>
           </div>
           <div className="detail-item">
             <span className="label">Member Since</span>

@@ -1,6 +1,6 @@
 import React from 'react';
 import './Comments.css';
-import deletemsg from '../imgs/deletemsg.png'
+import deletemsg from '../imgs/deletemsg.svg'
 
 const CommentList = ({ 
   comments, 

@@ -4,19 +4,21 @@
   color: #fff;
   overflow-x: hidden;
   padding: 2rem 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.container-fluid {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 .search-panel {
   background-color: rgb(1, 1, 1);
   backdrop-filter: blur(10px);
   padding: 2rem;
-  height: calc(100vh - 4rem);
-  overflow-y: auto;
-  position: fixed;
-  width: 33.333333%;
-  top: 2rem;
-  left: 0;
-  z-index: 10;
+  min-height: 100%;
 }
 
 .brand h1 {
@@ -154,17 +156,13 @@
 }
 
 .map-panel {
+  min-height: 500px;
   position: relative;
-  min-height: calc(100vh - 4rem);
-  margin-left: 33.333333%;
-  width: 66.666667%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 0 2rem;
 }
 
 .map-container {
+  width: 100%;
+  height: 500px;
   position: relative;
   width: 100%;
   max-width: 1000px;
@@ -204,22 +202,55 @@
 }
 
 .map-dialogue {
-  background: rgba(15, 23, 42, 0.9);
-  border-radius: 8px;
+  background: rgba(2, 3, 5, 0.911);
+  /* border-radius: 16px; */
   padding: 1rem;
   color: #fff;
   max-width: 300px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(0, 209, 255, 0.2);
+  z-index: 1000;
 }
 
 .map-dialogue h3 {
   color: #00D1FF;
   font-size: 1.1rem;
-  margin-bottom: 0.5rem;
+  margin-bottom: 1rem;
+  font-weight: 600;
 }
 
 .map-dialogue p {
   margin: 0;
   white-space: pre-line;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+/* Azure Maps popup overrides */
+.atlas-popup {
+  background: transparent !important;
+  box-shadow: none !important;
+  max-width: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.atlas-popup-content {
+  background: transparent !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  max-height: none !important;
+}
+
+.atlas-popup .atlas-popup-content {
+  padding: 0 !important;
+  margin: 0 !important;
+  background: transparent !important;
+}
+
+.atlas-popup-tail {
+  display: none !important;
 }
 
 .map-comments {
@@ -230,7 +261,7 @@
 }
 
 .map-comments .comments-container {
-  background: rgba(30, 41, 59, 0.5);
+  background: rgb(2, 3, 5);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 12px;
   padding: 1.5rem;
@@ -239,25 +270,25 @@
 }
 
 .map-comments .comment-form textarea {
-  background: rgba(15, 23, 42, 0.4);
+  background: rgba(2, 3, 5);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 8px;
 }
 
 .map-comments .comment-form textarea:focus {
-  background: rgba(15, 23, 42, 0.6);
+  background: rgb(2, 3, 5);
   border-color: #00D1FF;
   box-shadow: 0 0 0 2px rgba(0, 209, 255, 0.2);
 }
 
 .map-comments .comment-card {
-  background: rgba(15, 23, 42, 0.4);
+  background: rgb(2, 3, 5);
   border: 1px solid rgba(255, 255, 255, 0.1);
   transition: all 0.3s ease;
 }
 
 .map-comments .comment-card:hover {
-  background: rgba(15, 23, 42, 0.6);
+  background: rgb(2, 3, 5);
 }
 
 .map-comments .comment-author {
@@ -285,7 +316,7 @@
 }
 
 .map-comments .comments-login-message {
-  background: rgba(15, 23, 42, 0.4);
+  background: rgb(2, 3, 5);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 8px;
   padding: 1.5rem;
@@ -305,13 +336,12 @@
   transform: translateY(-1px);
 }
 
-/* Remove the old comments section styles */
-.comments-section,
-.user-avatars,
-.satisfaction-score,
-.score,
-.score-label {
-  display: none;
+.comments-section {
+  background-color: transparent;
+  border-radius: 8px;
+  margin: 2rem auto;
+  max-width: 1200px;
+  width: 100%;
 }
 
 .map-disclaimer {
@@ -417,6 +447,11 @@
 
   .map-info {
     padding: 1.5rem;
+  }
+
+  .comments-section {
+    margin: 1rem auto;
+    padding: 1rem;
   }
 }
 

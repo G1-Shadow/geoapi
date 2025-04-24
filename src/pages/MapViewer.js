@@ -275,14 +275,10 @@ const MapViewer = () => {
   // Function to fetch sim data from backend
   const fetchSimData = async (lat, lng) => {
     try {
-      // Show default dialogue box immediately
-      setDialogueInfo({
-        title: 'Location Information',
-        content: `Latitude: ${lat.toFixed(6)}
-                  Longitude: ${lng.toFixed(6)}
-                  Fetching network data...`
-      });
-      setShowDialogue(true);
+      if (!currentPopup) {
+        console.error('No popup available to update');
+        return;
+      }
 
       const response = await fetch('https://netintel-app.onrender.com/api/sim/get', {
         method: 'POST',
@@ -300,29 +296,43 @@ const MapViewer = () => {
       }
 
       const data = await response.json();
-      console.log('Received SIM data:', data); // Debug log
-      
-      // Update dialogue box with the received data
-      setDialogueInfo({
-        title: 'Network Information',
-        content: `Location: [${data.location[0]}, ${data.location[1]}]
-                  Best Provider: ${data.provider}
-                  Network Score: ${data.score}/5`
-      });
+      console.log('Received SIM data:', data);
 
-      // Update state variables for sim provider and score
+      // Update popup content with the new data
+      const content = `
+        <div class="map-dialogue">
+          <h3>Network Information</h3>
+          <p>Location: [${lat.toFixed(6)}, ${lng.toFixed(6)}]
+Best Provider: ${data.provider}
+Network Score: ${data.score}/5</p>
+        </div>
+      `;
+      
+      if (currentPopup) {
+        currentPopup.setOptions({
+          content: content
+        });
+      }
+
+      // Update state variables
       setBestSimProvider(data.provider);
       setSimScore(data.score);
 
     } catch (error) {
       console.error('Error fetching sim data:', error);
-      setDialogueInfo({
-        title: 'Error',
-        content: `Could not fetch network information.
-                  
-                  Latitude: ${lat.toFixed(6)}
-                  Longitude: ${lng.toFixed(6)}`
-      });
+      if (currentPopup) {
+        currentPopup.setOptions({
+          content: `
+            <div class="map-dialogue">
+              <h3>Error</h3>
+              <p>Could not fetch network information.
+                
+Latitude: ${lat.toFixed(6)}
+Longitude: ${lng.toFixed(6)}</p>
+            </div>
+          `
+        });
+      }
     }
   };
 
@@ -352,25 +362,28 @@ const MapViewer = () => {
         setCurrentMarker(null);
       }
 
+      // Remove existing popup if any
+      if (currentPopup) {
+        currentPopup.close();
+        setCurrentPopup(null);
+      }
+
       // Create data source if it doesn't exist
       if (!dataSourceRef.current) {
         dataSourceRef.current = new window.atlas.source.DataSource();
         map.sources.add(dataSourceRef.current);
       }
 
-      // Create point feature
-      const point = new window.atlas.data.Feature(
-        new window.atlas.data.Point([longitude, latitude])
-      );
-
       // Clear existing data and add new point
       dataSourceRef.current.clear();
-      dataSourceRef.current.add(point);
+      dataSourceRef.current.add(new window.atlas.data.Feature(
+        new window.atlas.data.Point([longitude, latitude])
+      ));
 
       // Create marker
       const marker = new window.atlas.HtmlMarker({
         position: [longitude, latitude],
-        color: '#4299e1',
+        color: '#00D1FF',
         text: '📍',
         pixelOffset: [0, 0]
       });
@@ -390,22 +403,25 @@ const MapViewer = () => {
       // Create popup
       const popup = new window.atlas.Popup({
         position: [longitude, latitude],
-        content: `
-          <div class="map-dialogue">
-            <h3>${dialogueInfo.title}</h3>
-            <p>${dialogueInfo.content}</p>
-          </div>
-        `,
         pixelOffset: [0, -30],
-        closeButton: false
+        closeButton: false,
+        content: document.createElement('div')
       });
 
-      // Remove existing popup if any
-      if (currentPopup) {
-        currentPopup.close();
-      }
+      // Set initial content
+      const content = `
+        <div class="map-dialogue">
+          <h3>Location Information</h3>
+          <p>Latitude: ${latitude.toFixed(6)}
+Longitude: ${longitude.toFixed(6)}
+Fetching network data...</p>
+        </div>
+      `;
+      popup.setOptions({
+        content: content
+      });
 
-      // Add popup to map
+      // Open popup
       popup.open(map);
       setCurrentPopup(popup);
       setShowDialogue(true);
@@ -499,6 +515,127 @@ const MapViewer = () => {
     }
   };
 
+  // Add function to find nearest location
+  const findNearestLocation = (latitude, longitude) => {
+    let nearestState = null;
+    let nearestCity = null;
+    let shortestDistance = Infinity;
+
+    // Helper function to calculate distance between two points
+    const calculateDistance = (lat1, lon1, lat2, lon2) => {
+      const R = 6371; // Earth's radius in km
+      const dLat = (lat2 - lat1) * Math.PI / 180;
+      const dLon = (lon2 - lon1) * Math.PI / 180;
+      const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+                Math.sin(dLon/2) * Math.sin(dLon/2);
+      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+      return R * c;
+    };
+
+    // Iterate through all states and cities
+    Object.entries(indianCities).forEach(([stateCode, cities]) => {
+      cities.forEach(city => {
+        const distance = calculateDistance(
+          latitude,
+          longitude,
+          parseFloat(city.lat),
+          parseFloat(city.lng)
+        );
+
+        if (distance < shortestDistance) {
+          shortestDistance = distance;
+          nearestState = stateCode;
+          nearestCity = city.name;
+        }
+      });
+    });
+
+    return { nearestState, nearestCity };
+  };
+
+  const updateDropdownsFromCoordinates = (latitude, longitude) => {
+    const { nearestState, nearestCity } = findNearestLocation(latitude, longitude);
+    if (nearestState && nearestCity) {
+      setSelectedState(nearestState);
+      setSelectedCity(nearestCity);
+    }
+  };
+
+  const handleGetCurrentLocation = async () => {
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      if ("geolocation" in navigator) {
+        // Try GPS first
+        const position = await new Promise((resolve, reject) => {
+          navigator.geolocation.getCurrentPosition(resolve, reject, {
+            enableHighAccuracy: true,
+            timeout: 10000,
+            maximumAge: 0
+          });
+        });
+
+        const { latitude, longitude } = position.coords;
+        setCoordinates({
+          lat: latitude.toString(),
+          lng: longitude.toString()
+        });
+        setCurrentLocation({ lat: latitude, lng: longitude });
+        updateMapWithCoordinates(latitude, longitude);
+        updateDropdownsFromCoordinates(latitude, longitude);
+      } else {
+        // Fallback to IP geolocation if GPS not available
+        const { latitude, longitude } = await getLocationFromIP();
+        setCoordinates({
+          lat: latitude.toString(),
+          lng: longitude.toString()
+        });
+        setCurrentLocation({ lat: latitude, lng: longitude });
+        updateMapWithCoordinates(latitude, longitude);
+        updateDropdownsFromCoordinates(latitude, longitude);
+        setError('GPS not available. Using approximate location from IP address.');
+      }
+    } catch (error) {
+      console.error('Location error:', error);
+      try {
+        // Try IP geolocation as fallback
+        const { latitude, longitude } = await getLocationFromIP();
+        setCoordinates({
+          lat: latitude.toString(),
+          lng: longitude.toString()
+        });
+        setCurrentLocation({ lat: latitude, lng: longitude });
+        updateMapWithCoordinates(latitude, longitude);
+        updateDropdownsFromCoordinates(latitude, longitude);
+        
+        let errorMessage = 'GPS location unavailable. Using approximate location from IP address. ';
+        if (error.code) {
+          switch (error.code) {
+            case error.PERMISSION_DENIED:
+              errorMessage += 'Location permission was denied.';
+              break;
+            case error.POSITION_UNAVAILABLE:
+              errorMessage += 'Location information was unavailable.';
+              break;
+            case error.TIMEOUT:
+              errorMessage += 'Location request timed out.';
+              break;
+            default:
+              errorMessage += 'An unknown error occurred.';
+          }
+        }
+        setError(errorMessage);
+      } catch (ipError) {
+        setError('Could not determine location. Please enter coordinates manually or try again later.');
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Update the coordinate search handler to also update dropdowns
   const handleCoordinateSearch = () => {
     if (!map) {
       setError('Map is not initialized yet. Please wait...');
@@ -521,6 +658,7 @@ const MapViewer = () => {
     try {
       setError(null);
       updateMapWithCoordinates(lat, lng);
+      updateDropdownsFromCoordinates(lat, lng);
     } catch (error) {
       console.error('Coordinate search error:', error);
       setError('Failed to update map with coordinates.');
@@ -529,6 +667,24 @@ const MapViewer = () => {
 
   const toggleDarkMode = () => {
     setIsDarkMode(!isDarkMode);
+  };
+
+  // Add IP geolocation function
+  const getLocationFromIP = async () => {
+    try {
+      const response = await fetch('https://ipapi.co/json/');
+      if (!response.ok) {
+        throw new Error('Failed to fetch IP location');
+      }
+      const data = await response.json();
+      return {
+        latitude: parseFloat(data.latitude),
+        longitude: parseFloat(data.longitude)
+      };
+    } catch (error) {
+      console.error('IP Geolocation error:', error);
+      throw error;
+    }
   };
 
   return (
@@ -576,12 +732,7 @@ const MapViewer = () => {
                 </div>
                 <button 
                   className="circle-btn"
-                  onClick={() => navigator.geolocation.getCurrentPosition(
-                    pos => setCoordinates({
-                      lat: pos.coords.latitude.toString(),
-                      lng: pos.coords.longitude.toString()
-                    })
-                  )}
+                  onClick={handleGetCurrentLocation}
                   disabled={isLoading}
                 >
                   <img src={Icon} alt="Get location" />
@@ -752,8 +903,13 @@ const MapViewer = () => {
                 </p>
               </div>
             </div>
+          </div>
+        </div>
 
-            <div className="map-comments mt-4">
+        {/* Comments Section - Now in a new row below map and search panels */}
+        <div className="row g-0">
+          <div className="col-12">
+            <div className="comments-section mt-4 px-4 pb-4">
               <Comments maxComments={5} showLoginPrompt={true} />
             </div>
           </div>
