@@ -205,6 +205,14 @@ const Comments = ({
       
       {user ? (
         <form className="comment-form" onSubmit={handleSubmit}>
+          <div className="comment-form-header">
+            <div className="comment-form-avatar">
+              <img src={user.picture || people} alt={user.name || 'User Avatar'} />
+            </div>
+            <div className="comment-form-user">
+              {user.name || 'Anonymous User'}
+            </div>
+          </div>
           <textarea
             value={newComment}
             onChange={(e) => setNewComment(e.target.value)}

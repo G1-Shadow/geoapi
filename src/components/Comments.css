@@ -86,6 +86,52 @@
   position: relative;
   margin: 2rem 0;
   width: 100%;
+  background: url('../imgs/Backgroundcom.png') no-repeat;
+  background-size: cover;
+  background-position: center;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 15px;
+  padding: 1rem;
+}
+
+.comment-form::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: 15px;
+  z-index: 0;
+}
+
+.comment-form-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  position: relative;
+  z-index: 1;
+}
+
+.comment-form-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.comment-form-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.comment-form-user {
+  color: #00D1FF;
+  font-weight: 600;
+  font-size: 1.1rem;
 }
 
 .comment-form textarea {
@@ -94,14 +140,14 @@
   padding: 1rem;
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 15px;
-  background: rgba(20, 20, 20, 0.8) url('../imgs/Backgroundcom.png') no-repeat;
-  background-size: cover;
-  background-position: center;
+  background: transparent;
   color: #fff;
   font-size: 1rem;
   resize: none;
   outline: none;
   transition: border-color 0.3s ease;
+  position: relative;
+  z-index: 1;
 }
 
 .comment-form textarea:focus {
@@ -110,6 +156,7 @@
 
 .comment-form .post-button {
   position: absolute;
+  z-index: 100;
   bottom: 1rem;
   right: 1rem;
   background: none;
