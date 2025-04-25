@@ -292,6 +292,7 @@
   align-items: center;
   justify-content: center;
   z-index: 2;
+  overflow: hidden;
 }
 
 .delete-comment img {
