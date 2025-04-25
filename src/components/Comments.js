@@ -3,6 +3,7 @@ import { useAuth } from '../context/AuthContext';
 import CommentList from './CommentList';
 import './Comments.css';
 import people from '../imgs/People.svg';
+import postIcon from '../imgs/postcomment.svg';
 
 const Comments = ({ 
   postId, // Optional: If comments are associated with a specific post
@@ -202,27 +203,30 @@ const Comments = ({
         </div>
       </div>
       
-      {!user && showLoginPrompt ? (
+      {user ? (
+        <form className="comment-form" onSubmit={handleSubmit}>
+          <textarea
+            value={newComment}
+            onChange={(e) => setNewComment(e.target.value)}
+            placeholder="Write a comment..."
+            required
+          />
+          <button 
+            type="submit" 
+            className="post-button"
+            disabled={!newComment.trim() || isLoading}
+          >
+            <img src={postIcon} alt="Post comment" />
+          </button>
+        </form>
+      ) : showLoginPrompt ? (
         <div className="comments-login-message">
           <p>Please login to post comments</p>
           <button onClick={handleLogin} className="login-button2">
             Login with Google
           </button>
         </div>
-      ) : (
-        <form onSubmit={handleSubmit} className="comment-form">
-          <textarea
-            value={newComment}
-            onChange={(e) => setNewComment(e.target.value)}
-            placeholder="Write your comment..."
-            disabled={isLoading}
-          />
-          {error && <div className="error-message">{error}</div>}
-          <button type="submit" disabled={isLoading}>
-            {isLoading ? 'Posting...' : 'Post Comment'}
-          </button>
-        </form>
-      )}
+      ) : null}
 
       <CommentList
         comments={comments}
