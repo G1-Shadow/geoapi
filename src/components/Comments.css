@@ -89,7 +89,7 @@
   background: url('../imgs/Backgroundcom.png') no-repeat;
   background-size: cover;
   background-position: center;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  /* border: 1px solid rgba(255, 255, 255, 0.1); */
   border-radius: 15px;
   padding: 1rem;
 }
@@ -101,7 +101,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.4);
+  /* background: rgba(0, 0, 0, 0.4); */
   border-radius: 15px;
   z-index: 0;
 }
@@ -138,7 +138,7 @@
   width: 100%;
   min-height: 120px;
   padding: 1rem;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  /* border: 1px solid rgba(255, 255, 255, 0.1); */
   border-radius: 15px;
   background: transparent;
   color: #fff;
@@ -150,9 +150,9 @@
   z-index: 1;
 }
 
-.comment-form textarea:focus {
+/* .comment-form textarea:focus {
   border-color: #00D1FF;
-}
+} */
 
 .comment-form .post-button {
   position: absolute;
@@ -201,7 +201,7 @@
   padding: 1.5rem 1.5rem 3rem 1.5rem;
   position: relative;
   transition: all 0.3s ease;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  /* border: 1px solid rgba(255, 255, 255, 0.1); */
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
@@ -212,7 +212,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.4);
+  /* background: rgba(0, 0, 0, 0.4); */
   border-radius: 16px;
   z-index: 0;
 }
