@@ -5,11 +5,8 @@ import './Comments.css';
 import people from '../imgs/People.svg';
 import postIcon from '../imgs/postcomment.png';
 
-const Comments = ({ 
-  postId, // Optional: If comments are associated with a specific post
-  maxComments = 10, // Optional: Limit number of comments shown
-  showLoginPrompt = true // Optional: Whether to show login prompt for non-authenticated users
-}) => {
+// Custom hook for comment logic
+export function useComments({ postId, maxComments = 10, showLoginPrompt = true }) {
   const { user } = useAuth();
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState('');
@@ -18,6 +15,7 @@ const Comments = ({
 
   useEffect(() => {
     fetchComments();
+    // eslint-disable-next-line
   }, [postId]);
 
   const handleLogin = () => {
@@ -28,16 +26,13 @@ const Comments = ({
     try {
       setIsLoading(true);
       const token = localStorage.getItem('token');
-      
       if (!token) {
         setComments([]);
         return;
       }
-      
       const url = postId 
-          ? `https://netintel-app.onrender.com/api/comments?postId=${postId}&limit=${maxComments}`
-          : `https://netintel-app.onrender.com/api/comments?limit=${maxComments}`;
-
+        ? `https://netintel-app.onrender.com/api/comments?postId=${postId}&limit=${maxComments}`
+        : `https://netintel-app.onrender.com/api/comments?limit=${maxComments}`;
       const response = await fetch(url, {
         method: 'GET',
         headers: {
@@ -46,21 +41,16 @@ const Comments = ({
         },
         credentials: 'include'
       });
-
       if (response.status === 401) {
         setComments([]);
         return;
       }
-
       if (!response.ok) throw new Error('Failed to fetch comments');
-      
       const data = await response.json();
-      console.log('Fetched comments:', data);
       setComments(data);
       setError(null);
     } catch (err) {
       setError('Failed to load comments');
-      console.error('Error fetching comments:', err);
     } finally {
       setIsLoading(false);
     }
@@ -68,26 +58,21 @@ const Comments = ({
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
     if (!user) {
       handleLogin();
       return;
     }
-
     if (!newComment.trim()) {
       setError('Comment cannot be empty');
       return;
     }
-
     try {
       setIsLoading(true);
       const token = localStorage.getItem('token');
-      
       if (!token) {
         handleLogin();
         return;
       }
-
       const response = await fetch('https://netintel-app.onrender.com/api/comments/add', {
         method: 'POST',
         headers: {
@@ -100,28 +85,20 @@ const Comments = ({
           postId: postId || null
         })
       });
-
-      console.log('Sending comment:', { text: newComment.trim(), postId: postId || null }); // Debug log
-
       if (response.status === 401) {
         handleLogin();
         return;
       }
-
       if (!response.ok) {
         const errorText = await response.text();
-        console.error('Server error:', errorText);
         throw new Error(errorText || 'Failed to post comment');
       }
-
       const postedComment = await response.json();
-      console.log('Posted comment response:', postedComment);
       setComments(prevComments => [postedComment, ...prevComments].slice(0, maxComments));
       setNewComment('');
       setError(null);
     } catch (err) {
       setError('Failed to post comment');
-      console.error('Error posting comment:', err);
     } finally {
       setIsLoading(false);
     }
@@ -132,16 +109,13 @@ const Comments = ({
       handleLogin();
       return;
     }
-
     try {
       setIsLoading(true);
       const token = localStorage.getItem('token');
-      
       if (!token) {
         handleLogin();
         return;
       }
-
       const response = await fetch(`https://netintel-app.onrender.com/api/comments/${commentId}`, {
         method: 'DELETE',
         headers: {
@@ -150,29 +124,24 @@ const Comments = ({
         },
         credentials: 'include'
       });
-
       if (response.status === 401) {
         setError('Unauthorized. Please login again.');
         handleLogin();
         return;
       }
-
       if (response.status === 403) {
         setError('You do not have permission to delete this comment.');
         return;
       }
-
       if (!response.ok) {
         const errorData = await response.text();
         throw new Error(errorData || 'Failed to delete comment');
       }
-
       setComments(prevComments => 
         prevComments.filter(comment => comment.id !== commentId)
       );
       setError(null);
     } catch (err) {
-      console.error('Error deleting comment:', err);
       setError(err.message || 'Failed to delete comment. Please try again.');
     } finally {
       setIsLoading(false);
@@ -190,6 +159,34 @@ const Comments = ({
     return new Date(dateString).toLocaleDateString('en-US', options);
   };
 
+  return {
+    user,
+    comments,
+    newComment,
+    setNewComment,
+    isLoading,
+    error,
+    handleLogin,
+    handleSubmit,
+    handleDelete,
+    formatDate,
+    showLoginPrompt
+  };
+}
+
+// Header + input section only
+export function CommentInputSection(props) {
+  const {
+    user,
+    newComment,
+    setNewComment,
+    isLoading,
+    error,
+    handleLogin,
+    handleSubmit,
+    showLoginPrompt
+  } = props;
+
   return (
     <div className="comments-container">
       <div className="comments-header">
@@ -202,7 +199,6 @@ const Comments = ({
           <span className="rating-text">Users Satisfaction</span>
         </div>
       </div>
-      
       {user ? (
         <form className="comment-form" onSubmit={handleSubmit}>
           <div className="comment-form-header">
@@ -235,17 +231,7 @@ const Comments = ({
           </button>
         </div>
       ) : null}
-
-      <CommentList
-        comments={comments}
-        isLoading={isLoading}
-        error={error}
-        user={user}
-        onDelete={handleDelete}
-        formatDate={formatDate}
-      />
+      {error && <div className="error-message">{error}</div>}
     </div>
   );
-};
-
-export default Comments; 
+} 

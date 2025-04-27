@@ -7,6 +7,8 @@ import Comments from '../components/Comments';
 import Icon from '../imgs/Icon.png';
 import IconLoc from '../imgs/Iconloc.svg';
 import Arrow from '../imgs/Arrow.png';
+import { useComments, CommentInputSection } from '../components/Comments';
+import CommentList from '../components/CommentList';
 
 const MapViewer = () => {
   const mapRef = useRef(null);
@@ -30,6 +32,9 @@ const MapViewer = () => {
   const [bestSimProvider, setBestSimProvider] = useState('');
   const [simScore, setSimScore] = useState(0);
   const dataSourceRef = useRef(null);
+
+  // Comments logic
+  const commentProps = useComments({ maxComments: 10, showLoginPrompt: true });
 
   // Get user's current location when component mounts
   useEffect(() => {
@@ -896,23 +901,26 @@ Longitude: ${lng.toFixed(6)}`
 
             <div className="map-container">
               <div ref={mapRef} className="map-view" />
-              {/* <button 
-                className={`theme-toggle ${isDarkMode ? 'active' : ''}`}
-                onClick={toggleDarkMode}
-                title={isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
-              >
-                {isDarkMode ? '🌞' : '🌙'}
-              </button> */}
             </div>
 
             <div className="map-disclaimer text-center mt-3">
               *The above advisory is not sponsored and is offered purely for charity.
             </div>
+          </div>
+        </div>
 
-            <div className="about-model mt-4">
-              <button className="btn btn-outline-light">About Model</button>
-              <div className="model-info mt-3">
-                <p>
+        {/* Comments Input & About Model Grid Section */}
+        <div className="row mt-4">
+          {/* Left Column - Comments Input Section */}
+          <div className="col-md-6">
+            <CommentInputSection {...commentProps} />
+          </div>
+          {/* Right Column - About Model Section */}
+          <div className="col-md-6">
+            <div className="about-model">
+              <h3 className="text-start mb-3">About Model</h3>
+              <div className="model-info">
+                <p className="text-start">
                   We leveraged a hybrid intelligence system that combines a rule-based heuristic engine
                   (2.4 million+ rows, 17+ features) with a machine learning model trained on 16 million+
                   recent samples (2022-2023). The model, powered by Random Forest and optimized for
@@ -925,12 +933,17 @@ Longitude: ${lng.toFixed(6)}`
           </div>
         </div>
 
-        {/* Comments Section - Now in a new row below map and search panels */}
-        <div className="row g-0">
+        {/* Comment Cards Grid Section */}
+        <div className="row g-0 mt-3">
           <div className="col-12">
-            <div className="comments-section mt-4 px-4 pb-4">
-              <Comments maxComments={5} showLoginPrompt={true} />
-            </div>
+            <CommentList
+              comments={commentProps.comments}
+              isLoading={commentProps.isLoading}
+              error={commentProps.error}
+              user={commentProps.user}
+              onDelete={commentProps.handleDelete}
+              formatDate={commentProps.formatDate}
+            />
           </div>
         </div>
       </div>
