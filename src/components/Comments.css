@@ -191,9 +191,13 @@
 
 .comments-list {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  grid-template-columns: repeat(2, 1fr);
   gap: 2rem;
   width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  margin-left: 2rem;
+  margin-right: 2rem;
 }
 
 .comment-card {
@@ -209,6 +213,8 @@
   height: 200px;
   /* border: 1px solid rgba(255, 255, 255, 0.1); */
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .comment-card::before {
@@ -410,5 +416,14 @@
   .comment-info {
     flex-direction: column;
     gap: 0.5rem;
+  }
+}
+
+@media (max-width: 900px) {
+  .comments-list {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    margin-left: 1rem;
+    margin-right: 1rem;
   }
 } 
