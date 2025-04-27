@@ -135,7 +135,7 @@
   padding: 1rem 2rem;
   border: none;
   border-radius: 10px;
-  background: linear-gradient(90deg, #2196f3 0%, #1976d2 100%);
+  background: linear-gradient(90deg, #00D0FF 0%, #00D0FF 100%);
   color: #ffffff;
   font-size: 1rem;
   font-weight: 600;
@@ -167,26 +167,6 @@
   text-align: center;
 }
 
-.contact-comments-section {
-  margin-top: 3rem;
-  width: 100%;
-}
-
-/* Adjust the comments container within contact page */
-.contact-comments-section .comments-container {
-  margin: 0;
-  background: transparent;
-  box-shadow: none;
-  padding: 0;
-}
-
-.contact-comments-section .comment-form textarea {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: rgba(255, 255, 255, 0.2);
-}
-
-
-
 /* Responsive Design */
 @media (max-width: 768px) {
   .contact-container {
@@ -217,10 +197,6 @@
 
   .contact-form-container {
     padding: 1.5rem;
-  }
-
-  .contact-comments-section {
-    margin-top: 2rem;
   }
 }
 

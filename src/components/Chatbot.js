@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import './Chatbot.css';
+import postcomment from '../imgs/postcomment.png'
 
 // Initialize the Gemini API with environment variable
 const API_KEY = process.env.REACT_APP_GEMINI_API_KEY;
@@ -40,7 +41,7 @@ const Chatbot = () => {
   useEffect(() => {
     if (isOpen && messages.length === 0) {
       setMessages([{
-        text: "Hello! I'm your Net Buddy. How can I help you today?",
+        text: "Hello! I'm Net Buddy, your NetIntel Chat Assistant. How can I assist you today?",
         sender: 'bot'
       }]);
     }
@@ -221,7 +222,7 @@ const Chatbot = () => {
       {isOpen && (
         <div className="chatbot-window">
           <div className="chatbot-header">
-            <h3>Chat Assistant</h3>
+            <h3>Net Buddy</h3>
           </div>
           
           <div className="chatbot-messages">
@@ -261,7 +262,7 @@ const Chatbot = () => {
               disabled={isLoading || !inputMessage.trim()}
               aria-label="Send message"
             >
-              Send
+              <img src={postcomment} alt="Send" height={40} width={40}/>
             </button>
           </form>
         </div>

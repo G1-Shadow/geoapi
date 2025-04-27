@@ -53,7 +53,7 @@ const Home = () => {
           <div className="feature-card">
             <div className="feature-content">
               <h3><span className="text-white">BEST</span> <span className="text-cyan">SIM PROVIDER</span></h3>
-              <div className="feature-icon">
+            <div className="feature-icon">
                 <img src={sim} alt="Best Sim Network" />
               </div>
             </div>
@@ -62,7 +62,7 @@ const Home = () => {
           <div className="feature-card">
             <div className="feature-content">
               <h3><span className="text-white">NET</span> <span className="text-cyan">BUDDY</span></h3>
-              <div className="feature-icon">
+            <div className="feature-icon">
                 <img src={netbuddy} alt="Net Buddy" />
               </div>
             </div>

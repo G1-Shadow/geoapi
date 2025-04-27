@@ -1,145 +1,103 @@
-import React, { useState } from 'react';
+import React from 'react';
 import './Pricing.css';
-import jio from '../imgs/jio.svg'
-import airtel from '../imgs/airtel.svg'
-import vi from '../imgs/vi.svg'
-import bsnl from '../imgs/bsnl.svg'
+import jio from '../imgs/jio.svg';
+import airtel from '../imgs/airtel.svg';
+import vi from '../imgs/vi.svg';
+import bsnl from '../imgs/bsnl.svg';
+import arrow from '../imgs/Arrow.png';
 
-const Plans = () => {
-  const [selectedPlan, setSelectedPlan] = useState(null);
-
-  const carrierPlans = [
+const Pricing = () => {
+  const onePlanData = [
     {
-      carrier: 'Jio',
-      logo: <img src={jio} alt="Jio" />, // Replace with actual logo
-      price: '₹299',
-      validity: '28 days',
-      data: '2GB/day',
-      features: [
-        'Unlimited Voice Calls',
-        'Unlimited 5G Data',
-        'JioTV, JioCinema',
-        '100 SMS/day',
-        'Apollo 24|7 Circle',
-      ],
-      color: '#0f3cc9',
-      popular: true
+      logo: <img src={jio} alt="Jio" />,
+      price: "₹249/28 days",
+      description: "Get 1 GB/Day + Unlimited Calls + 100 SMS/Day valid for 28 Days. Post daily quota, data speed will be upto 64Kbps. Post daily SMS quota charges applicable at Rs 1/1.5 for Local/STD SMS.",
+      rechargeUrl: "https://www.jio.com/recharge"
     },
     {
-      carrier: 'Airtel',
-      logo: <img src={airtel} alt="Airtel" />, // Replace with actual logo
-      price: '₹299',
-      validity: '28 days',
-      data: '1.5GB/day',
-      features: [
-        'Unlimited Voice Calls',
-        'Unlimited 5G Data',
-        'Amazon Prime Mobile',
-        'Apollo 24|7 Circle',
-        '100 SMS/day',
-      ],
-      color: '#ff1f1f',
-      popular: false
+      logo: <img src={airtel} alt="Airtel" />,
+      price: "₹299/28 days",
+      description: "Get 1 GB/Day + Unlimited Calls + 100 SMS/Day valid for 28 Days. Post daily quota, data speed will be upto 64Kbps. Post daily SMS quota charges applicable at Rs 1/1.5 for Local/STD SMS.",
+      rechargeUrl: "https://www.airtel.in/recharge"
     },
     {
-      carrier: 'VI',
-      logo: <img src={vi} alt="VI" />, // Replace with actual logo
-      price: '₹299',
-      validity: '28 days',
-      data: '1.5GB/day',
-      features: [
-        'Unlimited Voice Calls',
-        'Unlimited Data from 12 AM to 6 AM',
-        'Vi Movies & TV',
-        'Weekend Data Rollover',
-        '100 SMS/day',
-      ],
-      color: '#f70',
-      popular: false
+      logo: <img src={vi} alt="VI" />,
+      price: "₹299/28 days",
+      description: "Get 1 GB/Day + Unlimited Calls + 100 SMS/Day valid for 28 Days. Post daily quota, data speed will be upto 64Kbps. Post daily SMS quota charges applicable at Rs 1/1.5 for Local/STD SMS.",
+      rechargeUrl: "https://www.myvi.in/recharge"
     },
     {
-      carrier: 'BSNL',
-      logo: <img src={bsnl} alt="BSNL" />, // Replace with actual logo
-      price: '₹247',
-      validity: '30 days',
-      data: '1GB/day',
-      features: [
-        'Unlimited Voice Calls',
-        'BSNL Tunes',
-        'Eros Now Entertainment',
-        'Free PRBT',
-        '100 SMS/day',
-      ],
-      color: '#1f8f2f',
-      popular: false
+      logo: <img src={bsnl} alt="BSNL" />,
+      price: "₹185/28 days",
+      description: "Get 1 GB/Day + Unlimited Calls + 100 SMS/Day valid for 28 Days. Post daily quota, data speed will be upto 80Kbps. Post daily SMS quota charges applicable at Rs 1/1.5 for Local/STD SMS.",
+      rechargeUrl: "https://portal.bsnl.in/myportal/quickrecharge.do"
     }
   ];
 
-  return (
-    <div className="plans-container">
-      <div className="plans-header">
-        <h1>Compare Prepaid Plans</h1>
-        <p>Find the best plan for your needs</p>
+  const onePointFivePlanData = [
+    {
+      logo: <img src={jio} alt="Jio" />,
+      price: "₹299/28 days",
+      description: "Jio Unlimited Offer: JioHotstar Mobile/TV subscription for 90 Days, Free 50 GB JioAICloud storage, JioHotstar subscription is a one time and limited period offer.Customers on Jio monthly plan need to recharge their plan within 48 hours of plan expiry to get their 2nd and 3rd month JioHotstar benefit. T&C apply.",
+      rechargeUrl: "https://www.jio.com/recharge"
+    },
+    {
+      logo: <img src={airtel} alt="Airtel" />,
+      price: "₹349/28 days",
+      description: "Get 1.5 GB/Day + Unlimited Calls + 100 SMS/Day valid for 28 Days.  2GB of backup Data every month at no extra Cost! Post daily quota, data speed will be upto 64Kbps. Post daily SMS quota charges applicable at Rs 1/1.5 for Local/STD SMS",
+      rechargeUrl: "https://www.airtel.in/recharge"
+    },
+    {
+      logo: <img src={vi} alt="VI" />,
+      price: "₹349/28 days",
+      description: "Get 1.5 GB/Day + Unlimited Calls + 100 SMS/Day valid for 28 Days. Enjoy unlimited Night data from 12am to 6am! Carry Mon-Fri unused data into Sat-Sun. 2GB of backup Data every month at no extra Cost! Post daily quota, data speed will be upto 64Kbps. Post daily SMS quota charges applicable at Rs 1/1.5 for Local/STD SMS",
+      rechargeUrl: "https://www.myvi.in/recharge"
+    },
+    {
+      logo: <img src={bsnl} alt="BSNL" />,
+      price: "₹205/28 days",
+      description: "Get 1.5 GB/Day + Unlimited Calls + 100 SMS/Day valid for 28 Days. Post daily quota, data speed will be upto 80Kbps. Post daily SMS quota charges applicable at Rs 1/1.5 for Local/STD SMS",
+      rechargeUrl: "https://portal.bsnl.in/myportal/quickrecharge.do"
+    }
+  ];
+
+  const renderPlanSection = (title, plans) => (
+    <div className="plan-section">
+      <div className="plan-category">
+        <span>{title}</span>
+        <img src={arrow} alt="Arrow" />
       </div>
-      
-      <div className="plans-grid">
-        {carrierPlans.map((plan, index) => (
-          <div 
-            key={index}
-            className={`plan-card ${plan.popular ? 'popular' : ''} ${selectedPlan === index ? 'selected' : ''}`}
-            style={{'--accent-color': plan.color}}
-            onClick={() => setSelectedPlan(index)}
-          >
-            {plan.popular && <div className="popular-tag">Most Popular</div>}
-            
-            <div className="plan-header">
-              <div className="carrier-logo">{plan.logo}</div>
-              <h2>{plan.carrier}</h2>
+      <div className="plans-slider">
+        {plans.map((plan, index) => (
+          <div key={index} className="plan-card">
+            <div className="plan-logo">
+              {plan.logo}
             </div>
-
-            <div className="plan-price">
-              <span className="amount">{plan.price}</span>
-              <span className="validity">/{plan.validity}</span>
-            </div>
-
-            <div className="plan-data">
-              <span className="data-amount">{plan.data}</span>
-              <span className="data-label">Data</span>
-            </div>
-
-            <ul className="plan-features">
-              {plan.features.map((feature, featureIndex) => (
-                <li key={featureIndex}>
-                  <span className="feature-icon">✓</span>
-                  {feature}
-                </li>
-              ))}
-            </ul>
-
+            <div className="plan-price">{plan.price}</div>
+            <p className="plan-description">{plan.description}</p>
             <button 
-              className="select-plan-button"
-              onClick={(e) => {
-                e.stopPropagation();
-                window.open(
-                  plan.carrier === 'Jio' ? 'https://www.jio.com/recharge' :
-                  plan.carrier === 'Airtel' ? 'https://www.airtel.in/recharge' :
-                  plan.carrier === 'VI' ? 'https://www.myvi.in/recharge' :
-                  'https://portal.bsnl.in/myportal/quickrecharge.do',
-                  '_blank'
-                );
-              }}
+              className="recharge-button"
+              onClick={() => window.open(plan.rechargeUrl, '_blank')}
             >
               Recharge Now
             </button>
           </div>
         ))}
       </div>
+    </div>
+  );
 
-      <div className="plans-footer">
-        <p>* Plan details are subject to change. Please verify on the respective carrier's website.</p>
+  return (
+    <div className="pricing-container">
+      <div className="pricing-header">
+        <h1>CURRENT PLANS OFFERED</h1>
+        <h2>BY <span className="highlight">SERVICE PROVIDERS</span></h2>
       </div>
+      
+      {renderPlanSection("1 GB/DAY PLANS", onePlanData)}
+      {renderPlanSection("1.5 GB/DAY PLANS", onePointFivePlanData)}
     </div>
   );
 };
 
-export default Plans; 
+export default Pricing; 

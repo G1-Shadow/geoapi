@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import SubmitPopup from '../components/SubmitPopup';
-import Comments from '../components/Comments';
 import './Contact.css';
 
 const Contact = () => {
@@ -148,10 +147,6 @@ const Contact = () => {
               {isSubmitting ? 'Sending...' : 'Send Message'}
             </button>
           </form>
-        </div>
-
-        <div className="contact-comments-section">
-          <Comments />
         </div>
       </div>
 

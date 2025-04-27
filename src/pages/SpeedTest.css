@@ -191,7 +191,7 @@
 @media (max-width: 1200px) {
   .speed-test-main {
     grid-template-columns: 1fr;
-  }
+}
 }
 
 @media (max-width: 768px) {

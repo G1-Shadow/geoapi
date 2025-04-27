@@ -3,7 +3,7 @@ import { useAuth } from '../context/AuthContext';
 import CommentList from './CommentList';
 import './Comments.css';
 import people from '../imgs/People.svg';
-import postIcon from '../imgs/postcomment.svg';
+import postIcon from '../imgs/postcomment.png';
 
 const Comments = ({ 
   postId, // Optional: If comments are associated with a specific post

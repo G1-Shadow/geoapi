@@ -719,7 +719,7 @@ Longitude: ${lng.toFixed(6)}`
             {/* Search by Coordinates */}
             <div className="search-section">
               <div className="search-header d-flex align-items-center justify-content-between mb-3">
-                <div className="d-flex align-items-center">
+                <div className="d-flex align-items-center search-label-container">
                   <span className="search-label">SEARCH BY</span>
                   <span className="search-type">COORDINATES</span>
                 </div>
@@ -770,7 +770,7 @@ Longitude: ${lng.toFixed(6)}`
             {/* Search by Location */}
             <div className="search-section">
               <div className="search-header d-flex align-items-center justify-content-between mb-3">
-                <div className="d-flex align-items-center">
+                <div className="d-flex align-items-center search-label-container">
                   <span className="search-label">SEARCH BY</span>
                   <span className="search-type">LOCATION</span>
                 </div>
