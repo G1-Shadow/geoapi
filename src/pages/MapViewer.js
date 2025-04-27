@@ -36,6 +36,10 @@ const MapViewer = () => {
   // Comments logic
   const commentProps = useComments({ maxComments: 10, showLoginPrompt: true });
 
+  // Split comments for two columns
+  const leftComments = commentProps.comments.filter((_, i) => i % 2 === 0);
+  const rightComments = commentProps.comments.filter((_, i) => i % 2 === 1);
+
   // Get user's current location when component mounts
   useEffect(() => {
     let watchId = null;
@@ -933,11 +937,21 @@ Longitude: ${lng.toFixed(6)}`
           </div>
         </div>
 
-        {/* Comment Cards Grid Section */}
+        {/* Comment Cards Two-Column Section */}
         <div className="row g-0 mt-3">
-          <div className="col-12">
+          <div className="col-md-6">
             <CommentList
-              comments={commentProps.comments}
+              comments={leftComments}
+              isLoading={commentProps.isLoading}
+              error={commentProps.error}
+              user={commentProps.user}
+              onDelete={commentProps.handleDelete}
+              formatDate={commentProps.formatDate}
+            />
+          </div>
+          <div className="col-md-6">
+            <CommentList
+              comments={rightComments}
               isLoading={commentProps.isLoading}
               error={commentProps.error}
               user={commentProps.user}
