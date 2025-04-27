@@ -938,26 +938,28 @@ Longitude: ${lng.toFixed(6)}`
         </div>
 
         {/* Comment Cards Two-Column Section */}
-        <div className="row g-0 mt-3">
-          <div className="col-md-6">
-            <CommentList
-              comments={leftComments}
-              isLoading={commentProps.isLoading}
-              error={commentProps.error}
-              user={commentProps.user}
-              onDelete={commentProps.handleDelete}
-              formatDate={commentProps.formatDate}
-            />
-          </div>
-          <div className="col-md-6">
-            <CommentList
-              comments={rightComments}
-              isLoading={commentProps.isLoading}
-              error={commentProps.error}
-              user={commentProps.user}
-              onDelete={commentProps.handleDelete}
-              formatDate={commentProps.formatDate}
-            />
+        <div style={{marginLeft: '2rem', marginRight: '2rem'}}>
+          <div className="row g-0 mt-3">
+            <div className="col-md-6">
+              <CommentList
+                comments={leftComments}
+                isLoading={commentProps.isLoading}
+                error={commentProps.error}
+                user={commentProps.user}
+                onDelete={commentProps.handleDelete}
+                formatDate={commentProps.formatDate}
+              />
+            </div>
+            <div className="col-md-6">
+              <CommentList
+                comments={rightComments}
+                isLoading={commentProps.isLoading}
+                error={commentProps.error}
+                user={commentProps.user}
+                onDelete={commentProps.handleDelete}
+                formatDate={commentProps.formatDate}
+              />
+            </div>
           </div>
         </div>
       </div>
