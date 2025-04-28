@@ -416,7 +416,7 @@ Fetching network data...</p>
         title: 'Network Information',
         content: `Location: [${lat.toFixed(6)}, ${lng.toFixed(6)}]
 Best Provider: ${data.provider}
-Network Score: ${data.score}/5`
+Confidence Score: ${data.score}%`
       });
 
       // Update popup content
