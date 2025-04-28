@@ -24,6 +24,7 @@ const Contact = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsSubmitting(true);
 
     try {
       const response = await fetch('https://netintel-app.onrender.com/api/contact', {
@@ -31,7 +32,7 @@ const Contact = () => {
         headers: {
           'Content-Type': 'application/json'
         },
-        credentials: 'include', // Important for CORS with credentials
+        credentials: 'include',
         body: JSON.stringify({
           name: formData.name,
           email: formData.email,
@@ -42,7 +43,11 @@ const Contact = () => {
 
       if (response.ok) {
         const data = await response.text();
-        alert(data); // Show success message
+        setPopupData({
+          isSuccess: true,
+          message: data
+        });
+        setShowPopup(true);
         // Reset form
         setFormData({
           name: '',
@@ -52,11 +57,21 @@ const Contact = () => {
         });
       } else {
         const errorText = await response.text();
-        alert(errorText);
+        setPopupData({
+          isSuccess: false,
+          message: errorText
+        });
+        setShowPopup(true);
       }
     } catch (error) {
       console.error('Error:', error);
-      alert('Failed to send message. Please try again later.');
+      setPopupData({
+        isSuccess: false,
+        message: 'Failed to send message. Please try again later.'
+      });
+      setShowPopup(true);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -144,7 +159,13 @@ const Contact = () => {
               className="submit-button"
               disabled={isSubmitting}
             >
-              {isSubmitting ? 'Sending...' : 'Send Message'}
+              {isSubmitting ? (
+                <div className="loading-spinner">
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                </div>
+              ) : 'Send Message'}
             </button>
           </form>
         </div>

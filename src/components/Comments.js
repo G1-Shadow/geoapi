@@ -31,8 +31,8 @@ export function useComments({ postId, maxComments = 10, showLoginPrompt = true }
         return;
       }
       const url = postId 
-        ? `https://netintel-app.onrender.com/api/comments?postId=${postId}&limit=${maxComments}`
-        : `https://netintel-app.onrender.com/api/comments?limit=${maxComments}`;
+          ? `https://netintel-app.onrender.com/api/comments?postId=${postId}&limit=${maxComments}`
+          : `https://netintel-app.onrender.com/api/comments?limit=${maxComments}`;
       const response = await fetch(url, {
         method: 'GET',
         headers: {

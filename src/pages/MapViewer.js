@@ -54,7 +54,7 @@ const MapViewer = () => {
             setCurrentLocation({ lat: latitude, lng: longitude });
             setCoordinates({ lat: latitude.toString(), lng: longitude.toString() });
             setError(null);
-            
+
             // Update map if it's already initialized
             if (map) {
               updateMapWithCoordinates(latitude, longitude);
@@ -79,7 +79,7 @@ const MapViewer = () => {
             setCurrentLocation({ lat: latitude, lng: longitude });
             setCoordinates({ lat: latitude.toString(), lng: longitude.toString() });
             setError(null);
-            
+
             // Update map with new location
             if (map) {
               updateMapWithCoordinates(latitude, longitude);
@@ -170,15 +170,15 @@ const MapViewer = () => {
   useEffect(() => {
     if (location.state?.fromSearch) {
       const { coordinates: coords, selectedState: state, selectedCity: city } = location.state;
-      
+
       if (coords) {
-        setCoordinates({ 
-          lat: coords.lat.toString(), 
-          lng: coords.lng.toString() 
+        setCoordinates({
+          lat: coords.lat.toString(),
+          lng: coords.lng.toString()
         });
         setCurrentLocation({ lat: coords.lat, lng: coords.lng });
       }
-      
+
       if (state) setSelectedState(state);
       if (city) setSelectedCity(city);
 
@@ -253,8 +253,8 @@ Fetching network data...`
       console.log('Initializing map with container:', mapRef.current);
 
       // Use currentLocation if available, otherwise use India center
-      const center = currentLocation 
-        ? [currentLocation.lng, currentLocation.lat] 
+      const center = currentLocation
+        ? [currentLocation.lng, currentLocation.lat]
         : [78.9629, 20.5937];
 
       const mapInstance = new window.atlas.Map(mapRef.current, {
@@ -524,7 +524,7 @@ Longitude: ${lng.toFixed(6)}`
     const cityName = e.target.value;
     setSelectedCity(cityName);
     setError(null); // Clear any existing errors
-    
+
     if (selectedState && cityName) {
       const city = indianCities[selectedState].find(c => c.name === cityName);
       if (city) {
@@ -554,10 +554,10 @@ Longitude: ${lng.toFixed(6)}`
       const R = 6371; // Earth's radius in km
       const dLat = (lat2 - lat1) * Math.PI / 180;
       const dLon = (lon2 - lon1) * Math.PI / 180;
-      const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-                Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
-                Math.sin(dLon/2) * Math.sin(dLon/2);
-      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+      const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+        Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+        Math.sin(dLon / 2) * Math.sin(dLon / 2);
+      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
       return R * c;
     };
 
@@ -637,7 +637,7 @@ Longitude: ${lng.toFixed(6)}`
         setCurrentLocation({ lat: latitude, lng: longitude });
         updateMapWithCoordinates(latitude, longitude);
         updateDropdownsFromCoordinates(latitude, longitude);
-        
+
         let errorMessage = 'GPS location unavailable. Using approximate location from IP address. ';
         if (error.code) {
           switch (error.code) {
@@ -736,9 +736,9 @@ Longitude: ${lng.toFixed(6)}`
                   <img src={Arrow} alt="Coordinates icon" />
                 </div>
               </div>
-              
+
               <div className="coordinate-controls d-flex align-items-center gap-3">
-                
+
 
                 <div className="coordinate-inputs-wrapper">
                   <input
@@ -758,7 +758,7 @@ Longitude: ${lng.toFixed(6)}`
                     disabled={isLoading}
                   />
                 </div>
-                <button 
+                <button
                   className="circle-btn"
                   onClick={handleGetCurrentLocation}
                   disabled={isLoading}
@@ -766,7 +766,7 @@ Longitude: ${lng.toFixed(6)}`
                   <img src={Icon} alt="Get location" />
                 </button>
 
-                <button 
+                <button
                   className="submit-btn"
                   onClick={handleCoordinateSearch}
                   disabled={isLoading || !map}
@@ -787,7 +787,7 @@ Longitude: ${lng.toFixed(6)}`
                   <img src={Arrow} alt="Location icon" />
                 </div>
               </div>
-              
+
               <div className="location-controls d-flex align-items-center gap-3">
                 <input
                   type="text"
@@ -802,7 +802,7 @@ Longitude: ${lng.toFixed(6)}`
                 />
                 <div className="location-dropdown-menu">
                   {indianStates.map(state => (
-                    <div 
+                    <div
                       key={state.code}
                       className="location-dropdown-item"
                       onClick={(e) => {
@@ -834,7 +834,7 @@ Longitude: ${lng.toFixed(6)}`
                 />
                 <div className="location-dropdown-menu">
                   {selectedState && indianCities[selectedState]?.map(city => (
-                    <div 
+                    <div
                       key={city.name}
                       className="location-dropdown-item"
                       onClick={(e) => {
@@ -842,17 +842,17 @@ Longitude: ${lng.toFixed(6)}`
                         if (dropdown) {
                           dropdown.classList.remove('show');
                         }
-                        
+
                         setSelectedCity(city.name);
                         const lat = parseFloat(city.lat);
                         const lng = parseFloat(city.lng);
-                        
+
                         if (!isNaN(lat) && !isNaN(lng)) {
                           setCoordinates({
                             lat: lat.toString(),
                             lng: lng.toString()
                           });
-                          
+
                           // Set initial dialogue info before updating map
                           setDialogueInfo({
                             title: 'Location Information',
@@ -861,7 +861,7 @@ Longitude: ${lng.toFixed(6)}`
                             Loading network data...`
                           });
                           setShowDialogue(true);
-                          
+
                           // Update map with coordinates
                           updateMapWithCoordinates(lat, lng);
                         }
@@ -872,7 +872,7 @@ Longitude: ${lng.toFixed(6)}`
                   ))}
                 </div>
 
-                <button 
+                <button
                   className="btn submit-btn"
                   onClick={() => {
                     if (selectedState && selectedCity) {
@@ -896,7 +896,7 @@ Longitude: ${lng.toFixed(6)}`
 
           <div className="col-md-8 map-panel">
             {isLoading && <LoadingSpinner />}
-            
+
             {error && (
               <div className="alert alert-danger m-3">
                 {error}
@@ -925,12 +925,7 @@ Longitude: ${lng.toFixed(6)}`
               <h3 className="text-start mb-3">About Model</h3>
               <div className="model-info">
                 <p className="text-start">
-                  We leveraged a hybrid intelligence system that combines a rule-based heuristic engine
-                  (2.4 million+ rows, 17+ features) with a machine learning model trained on 16 million+
-                  recent samples (2022-2023). The model, powered by Random Forest and optimized for
-                  performance, achieved low RMSE, ensuring highly reliable predictions. This fusion of
-                  domain logic and data-driven learning delivers the most accurate SIM provider
-                  recommendations tailored to real-world conditions.
+                  We built a hybrid intelligence system that combines a rule-based heuristic engine (2.4M+ tower samples, 17+ features) with a machine learning model trained on 16M+ service records from 2022–2023. Powered by CatBoost, it fuses domain logic and data-driven learning to deliver the most accurate SIM provider recommendations for real-world conditions.
                 </p>
               </div>
             </div>
@@ -938,7 +933,7 @@ Longitude: ${lng.toFixed(6)}`
         </div>
 
         {/* Comment Cards Two-Column Section */}
-        <div style={{marginLeft: '2rem', marginRight: '2rem'}}>
+        <div style={{ marginLeft: '2rem', marginRight: '2rem' }}>
           <div className="row g-0 mt-3">
             <div className="col-md-6">
               <CommentList
