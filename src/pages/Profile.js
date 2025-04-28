@@ -51,13 +51,13 @@ const Profile = () => {
           <div className="detail-item">
             <span className="label">Member Since</span>
             <span className="value">
-              {user?.createdAt ? new Date(user.createdAt).toLocaleDateString() : 'Invalid Date'}
+              {user?.createdAt ? new Date(user.createdAt).toLocaleDateString() : '2025'}
             </span>
           </div>
           <div className="detail-item">
             <span className="label">Last Login</span>
             <span className="value">
-              {user?.lastLogin ? new Date(user.lastLogin).toLocaleDateString() : 'Invalid Date'}
+              {user?.lastLogin ? new Date(user.lastLogin).toLocaleDateString() : '2025'}
             </span>
           </div>
         </div>
