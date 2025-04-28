@@ -103,7 +103,7 @@
   width: 100%;
   padding: 1rem;
   background: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid rgb(255, 0, 0);
   color: #fff;
   border-radius: 8px;
   font-size: 1rem;
@@ -112,7 +112,7 @@
 }
 
 .logout-button:hover {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgb(255, 0, 0);
   border-color: rgba(255, 255, 255, 0.3);
 }
 
